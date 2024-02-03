@@ -1,9 +1,9 @@
-var createError = require('http-errors');
+import createError from 'http-errors';
 import express, { Express, Request, Response } from 'express';
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var indexRouter = require('./routes/index');
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import indexRouter from './routes/index.js';
 
 const app: Express = express();
 
@@ -35,4 +35,4 @@ app.use(function(err: any, req: Request, res: Response, next: any) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;
