@@ -1,6 +1,8 @@
 import createError from 'http-errors';
-import express, { Express, Request, Response } from 'express';
+import express from 'express';
+import { Express, Request, Response } from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import indexRouter from './routes/index.js';
@@ -8,6 +10,8 @@ import indexRouter from './routes/index.js';
 const app: Express = express();
 
 // view engine setup
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
