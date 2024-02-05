@@ -1,4 +1,4 @@
-CREATE DATABASE chat_app;
+CREATE DATABASE chatter;
 USE chat_app;
 
 CREATE TABLE user (
@@ -8,3 +8,7 @@ CREATE TABLE user (
     username TEXT NOT NULL,
     password TEXT NOT NULL
 )
+
+INSERT INTO user (first_name, last_name, username, password)
+VALUES
+('petho', 'burr', 'pethoburr', 'burrburr')
