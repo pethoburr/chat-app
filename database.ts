@@ -2,7 +2,7 @@ import mysql from 'mysql2'
 import dotenv from 'dotenv';
 dotenv.config()
 
-const pool = mysql.createPool({
+export const pool = mysql.createPool({
     user: process.env.USER,
     host: process.env.HOST,
     password: process.env.PASSWORD,

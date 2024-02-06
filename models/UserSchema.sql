@@ -1,5 +1,5 @@
 CREATE DATABASE chatter;
-USE chat_app;
+USE chatter;
 
 CREATE TABLE user (
     id integer PRIMARY KEY AUTO_INCREMENT,

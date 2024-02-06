@@ -6,8 +6,45 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import indexRouter from './routes/index.js';
+import passport from 'passport';
+import LocalStrategy from 'passport-local';
+import bcrypt from 'bcryptjs';
+import passportJWT from 'passport-jwt';
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 
 const app: Express = express();
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await User.findOne({ username: username });
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+      // passwords do not match!
+      return done(null, false, { message: "Incorrect password" })
+      }
+      return done(null, user);
+    } catch(err) {
+      return done(err);
+    }
+  })
+);
+
+passport.use(new JWTStrategy({
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.SECRET
+}, async function (jwtPayload, done) {
+  try {
+    const user = await User.findById(jwtPayload.id);
+    return done(null, user);
+  } catch (err) {
+    return done(err);
+  }
+}))
 
 // view engine setup
 const __filename = fileURLToPath(import.meta.url);
