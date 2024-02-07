@@ -16,8 +16,15 @@ const ExtractJWT = passportJWT.ExtractJwt;
 import dotenv from 'dotenv';
 import { matchId, matchUsername } from './database.js';
 dotenv.config()
+import { Server, Socket } from 'socket.io';
 
 const app: Express = express();
+
+const io = new Server(3000);
+
+io.on('connection', (socket: Socket) => {
+    console.log(socket.id);
+});
 
 passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
