@@ -20,7 +20,11 @@ import { Server, Socket } from 'socket.io';
 
 const app: Express = express();
 
-const io = new Server(3000);
+const io = new Server(3000, {
+  cors: {
+    origin: ['https://localhost:5173']
+  }
+});
 
 io.on('connection', (socket: Socket) => {
     console.log(socket.id);
