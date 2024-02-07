@@ -18,18 +18,21 @@ export const matchUsername = async (username: string) => {
     const result: any[] = await pool.query("SELECT * FROM user WHERE username = ?",[username]);
     const unarrayed = result[0]
     const noarray = unarrayed[0];
-    console.log('match username:' + JSON.stringify(noarray));
     return noarray;
 }
 
 export const matchId = async (id: number) => {
     const result = await pool.query("SELECT * FROM user WHERE id = ?",[id]);
-    console.log('match id:' + JSON.stringify(result));
     return result;
 }
 
-matchUsername('pethoburr');
+export const register = async (first_name: string, last_name: string, username: string, password: string) => {
+    const data = await pool.query(`INSERT INTO users (first_name, last_name, username, password) VALUES ('${first_name}', ${last_name}', ${username}', '${password}' ) `)
+    console.log('data:' + JSON.stringify(data))
+}
 
-matchId(1);
+// matchUsername('pethoburr');
 
-allUsers();
+// matchId(1);
+
+// allUsers();
