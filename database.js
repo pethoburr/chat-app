@@ -8,14 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import mysql from 'mysql2';
-const pool = mysql.createPool({
-    user: 'root',
-    host: 'localhost',
-    password: 'Batista1!',
-    database: 'chatter'
+import dotenv from 'dotenv';
+dotenv.config();
+export const pool = mysql.createPool({
+    user: process.env.USER,
+    host: process.env.HOST,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 }).promise();
-const check = () => __awaiter(void 0, void 0, void 0, function* () {
+const allUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user");
-    console.log(result);
+    console.log('all users:' + JSON.stringify(result));
 });
-check();
+export const matchUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query("SELECT * FROM user WHERE username = ?", [username]);
+    const unarrayed = result[0];
+    const noarray = unarrayed[0];
+    console.log('match username:' + JSON.stringify(noarray));
+    return noarray;
+});
+export const matchId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query("SELECT * FROM user WHERE id = ?", [id]);
+    console.log('match id:' + JSON.stringify(result));
+    return result;
+});
+matchUsername('pethoburr');
+matchId(1);
+allUsers();

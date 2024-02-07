@@ -13,13 +13,17 @@ import cors from 'cors';
 import passportJWT from 'passport-jwt';
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+import dotenv from 'dotenv';
+import { matchId, matchUsername } from './database.js';
+dotenv.config()
 
 const app: Express = express();
 
 passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
-      const user = await User.findOne({ username: username });
+      const user = await matchUsername(username);
+      console.log('user:' + user)
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
@@ -35,12 +39,14 @@ passport.use(
   })
 );
 
-passport.use(new JWTStrategy({
+const opt = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET
-}, async function (jwtPayload, done) {
+  secretOrKey: process.env.SECRET as string
+}
+
+passport.use(new JWTStrategy(opt, async function (jwtPayload, done) {
   try {
-    const user = await User.findById(jwtPayload.id);
+    const user = await matchId(jwtPayload.id);
     return done(null, user);
   } catch (err) {
     return done(err);
