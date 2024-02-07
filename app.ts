@@ -28,6 +28,17 @@ const io = new Server(3000, {
 
 io.on('connection', (socket: Socket) => {
     console.log(socket.id);
+    socket.on('send-message', (message: string, room: string) => {
+      console.log(message)
+      if (room === '') {
+        socket.broadcast.emit('receive-mssage', message)
+      } else {
+        socket.to(room).emit('receive-message', message)
+      }
+    })
+    socket.on('join-room', (room: string) => {
+      socket.join(room);
+    })
 });
 
 passport.use(
