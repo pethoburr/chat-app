@@ -4,6 +4,9 @@ import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
 import { matchUsername } from '../database.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
+import passport from 'passport';
 
 export const sign_up = 
 [   
@@ -23,7 +26,7 @@ export const sign_up =
             .trim()
             .isLength({ min: 1 })
             .escape(),
-        asyncHandler(async (req, res, next) => {
+        asyncHandler(async (req: Request, res: Response, next) => {
             console.log('req:' + JSON.stringify(req.body))
             bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
                 if (err) {
@@ -48,9 +51,27 @@ export const sign_up =
         })
 ]
 
-export const login = asyncHandler(async (req, res, next) => {
-    res.send('login not implemented');
-})
+interface User {
+    _id: string,
+    first_name: string,
+    last_name: string,
+    username: string,
+    password: string
+}
+
+export const login = asyncHandler(async (req: Request, res: Response, next) => {
+        passport.authenticate('local', function (err: any, user: User, info: User) {
+          if (err) { 
+            return next(err)
+          }
+          const userId = user._id.toString() 
+          const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
+          return res
+            .cookie('token', token, { httpOnly: true, secure: false, path: '/', sameSite: 'lax'})
+            .status(200)
+            .json({ user, token })
+        })(req, res, next)
+      })
 
 export const logout = asyncHandler(async (req, res, next) => {
     res.send('logout not implemented');
