@@ -34,7 +34,7 @@ export const sign_up =
                     return next(err)
                 }
                 const errors = validationResult(req);
-                const user = await register(req.body.first_name, req.body.last_name, req.body.username, req.body.password)
+                const user = await register(req.body.first_name, req.body.last_name, req.body.username, hashedPassword)
                 if (!errors.isEmpty()) {
                     console.log('uhm here')
                     res.status(400).json(errors.array());
