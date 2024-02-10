@@ -73,6 +73,12 @@ export const login = asyncHandler(async (req: Request, res: Response, next) => {
         })(req, res, next)
       })
 
-export const logout = asyncHandler(async (req, res, next) => {
-    res.send('logout not implemented');
+export const logout = asyncHandler(async (req: Request, res: Response, next) => {
+    const authHeader = req.headers['cookie'];
+    if (authHeader) {
+        // const cookie = authHeader.split('=')[1]; 
+        // const accessToken = cookie.split(';')[0];
+        res.clearCookie('token');
+        res.end();
+    }
 })
