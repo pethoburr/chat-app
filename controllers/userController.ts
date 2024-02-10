@@ -2,11 +2,12 @@ import { pool } from '../database.js';
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
-import { matchUsername } from '../database.js';
+import { matchUsername, matchId } from '../database.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import passport from 'passport';
+import { match } from 'assert';
 
 export const sign_up = 
 [   
@@ -81,4 +82,10 @@ export const logout = asyncHandler(async (req: Request, res: Response, next) => 
         res.clearCookie('token');
         res.end();
     }
+})
+
+export const userProfile = asyncHandler(async (req: Request, res: Response, next) => {
+    const userId = req.params.id;
+    const user = matchId(userId);
+    console.log(user);
 })

@@ -24,14 +24,16 @@ export const matchUsername = (username) => __awaiter(void 0, void 0, void 0, fun
     const result = yield pool.query("SELECT * FROM user WHERE username = ?", [username]);
     const unarrayed = result[0];
     const noarray = unarrayed[0];
-    console.log('match username:' + JSON.stringify(noarray));
     return noarray;
 });
 export const matchId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user WHERE id = ?", [id]);
-    console.log('match id:' + JSON.stringify(result));
     return result;
 });
-matchUsername('pethoburr');
-matchId(1);
-allUsers();
+export const register = (first_name, last_name, username, password) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield pool.query(`INSERT INTO users (first_name, last_name, username, password) VALUES ('${first_name}', ${last_name}', ${username}', '${password}' ) `);
+    console.log('data:' + JSON.stringify(data));
+});
+// matchUsername('pethoburr');
+// matchId(1);
+// allUsers();

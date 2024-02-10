@@ -8,9 +8,78 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import asyncHandler from 'express-async-handler';
+import { body, validationResult } from 'express-validator';
+import { register } from '../database.js';
+import { matchUsername, matchId } from '../database.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+export const sign_up = [
+    body("first_name", "Must enter name")
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body("last_name", "Enter last name")
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body("username", "Username required")
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body("password", "enter password")
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('req:' + JSON.stringify(req.body));
+        bcrypt.hash(req.body.password, 10, (err, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+            if (err) {
+                console.log('ye here');
+                return next(err);
+            }
+            const errors = validationResult(req);
+            const user = yield register(req.body.first_name, req.body.last_name, req.body.username, hashedPassword);
+            if (!errors.isEmpty()) {
+                console.log('uhm here');
+                res.status(400).json(errors.array());
+                return;
+            }
+            else {
+                const checker = yield matchUsername(req.body.username);
+                if (checker) {
+                    res.status(500).json({ message: 'Username already in use' });
+                    return;
+                }
+                res.status(200).json(user);
+            }
+        }));
+    }))
+];
 export const login = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send('login not implemented');
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        const userId = user._id.toString();
+        const token = jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+        return res
+            .cookie('token', token, { httpOnly: true, secure: false, path: '/', sameSite: 'lax' })
+            .status(200)
+            .json({ user, token });
+    })(req, res, next);
 }));
 export const logout = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send('logout not implemented');
+    const authHeader = req.headers['cookie'];
+    if (authHeader) {
+        // const cookie = authHeader.split('=')[1]; 
+        // const accessToken = cookie.split(';')[0];
+        res.clearCookie('token');
+        res.end();
+    }
+}));
+export const userProfile = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.id;
+    const user = matchId(userId);
+    console.log(user);
 }));

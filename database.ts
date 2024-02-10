@@ -21,7 +21,7 @@ export const matchUsername = async (username: string) => {
     return noarray;
 }
 
-export const matchId = async (id: number) => {
+export const matchId = async (id: string) => {
     const result = await pool.query("SELECT * FROM user WHERE id = ?",[id]);
     return result;
 }
