@@ -77,8 +77,6 @@ export const login = asyncHandler(async (req: Request, res: Response, next) => {
 export const logout = asyncHandler(async (req: Request, res: Response, next) => {
     const authHeader = req.headers['cookie'];
     if (authHeader) {
-        // const cookie = authHeader.split('=')[1]; 
-        // const accessToken = cookie.split(';')[0];
         res.clearCookie('token');
         res.end();
     }
