@@ -26,7 +26,7 @@ import { matchId, matchUsername } from './database.js';
 dotenv.config();
 import { Server } from 'socket.io';
 const app = express();
-const io = new Server(3000, {
+const io = new Server(5174, {
     cors: {
         origin: ['https://localhost:5173']
     }
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
 passport.use(new LocalStrategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield matchUsername(username);
-        console.log('user:' + user);
+        console.log('username:' + username);
         if (!user) {
             return done(null, false, { message: "Incorrect username" });
         }

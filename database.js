@@ -31,7 +31,7 @@ export const matchId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 export const register = (first_name, last_name, username, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield pool.query(`INSERT INTO users (first_name, last_name, username, password) VALUES ('${first_name}', ${last_name}', ${username}', '${password}' ) `);
+    const data = yield pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES ('${first_name}', '${last_name}', '${username}', '${password}' ) `);
     console.log('data:' + JSON.stringify(data));
 });
 // matchUsername('pethoburr');

@@ -20,7 +20,7 @@ import { Server, Socket } from 'socket.io';
 
 const app: Express = express();
 
-const io = new Server(3000, {
+const io = new Server(5174, {
   cors: {
     origin: ['https://localhost:5173']
   }
@@ -45,7 +45,7 @@ passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
       const user = await matchUsername(username);
-      console.log('user:' + user)
+      console.log('username:' + username)
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }

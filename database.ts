@@ -27,7 +27,7 @@ export const matchId = async (id: string) => {
 }
 
 export const register = async (first_name: string, last_name: string, username: string, password: string) => {
-    const data = await pool.query(`INSERT INTO users (first_name, last_name, username, password) VALUES ('${first_name}', ${last_name}', ${username}', '${password}' ) `)
+    const data = await pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES ('${first_name}', '${last_name}', '${username}', '${password}' ) `)
     console.log('data:' + JSON.stringify(data))
 }
 

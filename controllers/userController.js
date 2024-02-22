@@ -57,9 +57,18 @@ export const sign_up = [
     }))
 ];
 export const login = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(`server request: ${req.body}`);
+    const obj = {
+        username: req.body.username,
+        password: req.body.password
+    };
     passport.authenticate('local', function (err, user, info) {
         if (err) {
             return next(err);
+        }
+        if (!user) {
+            console.log(`info: ${info}`);
+            return res.status(400).json(info);
         }
         const userId = user._id.toString();
         const token = jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
@@ -72,8 +81,6 @@ export const login = asyncHandler((req, res, next) => __awaiter(void 0, void 0, 
 export const logout = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers['cookie'];
     if (authHeader) {
-        // const cookie = authHeader.split('=')[1]; 
-        // const accessToken = cookie.split(';')[0];
         res.clearCookie('token');
         res.end();
     }

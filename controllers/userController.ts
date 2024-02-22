@@ -61,9 +61,18 @@ interface User {
 }
 
 export const login = asyncHandler(async (req: Request, res: Response, next) => {
+        console.log(`server request: ${req.body}`)
+        const obj = {
+            username: req.body.username,
+            password: req.body.password
+        }
         passport.authenticate('local', function (err: any, user: User, info: User) {
           if (err) { 
             return next(err)
+          }
+          if (!user) {
+            console.log(`info: ${info}`);
+            return res.status(400).json(info);
           }
           const userId = user._id.toString() 
           const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
