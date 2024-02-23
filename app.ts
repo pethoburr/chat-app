@@ -45,7 +45,7 @@ passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
       const user = await matchUsername(username);
-      console.log('username:' + username)
+      console.log('user:' + JSON.stringify(user))
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
@@ -54,6 +54,7 @@ passport.use(
       // passwords do not match!
       return done(null, false, { message: "Incorrect password" })
       }
+      console.log('idk man shit worked')
       return done(null, user);
     } catch(err) {
       return done(err);

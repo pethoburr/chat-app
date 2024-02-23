@@ -12,7 +12,6 @@ import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
 import { matchUsername, matchId } from '../database.js';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import passport from 'passport';
 export const sign_up = [
     body("first_name", "Must enter name")
@@ -56,26 +55,19 @@ export const sign_up = [
         }));
     }))
 ];
-export const login = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(`server request: ${req.body}`);
-    const obj = {
-        username: req.body.username,
-        password: req.body.password
-    };
+export const log_in = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(`server request: ${JSON.stringify(req.body)}`);
     passport.authenticate('local', function (err, user, info) {
         if (err) {
             return next(err);
         }
         if (!user) {
-            console.log(`info: ${info}`);
+            console.log(`info: ${JSON.stringify(info)}`);
             return res.status(400).json(info);
         }
-        const userId = user._id.toString();
-        const token = jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
-        return res
-            .cookie('token', token, { httpOnly: true, secure: false, path: '/', sameSite: 'lax' })
-            .status(200)
-            .json({ user, token });
+        //   const userId = user._id.toString() 
+        //   const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
+        return res.status(200).json({ user });
     })(req, res, next);
 }));
 export const logout = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

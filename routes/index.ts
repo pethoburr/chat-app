@@ -1,7 +1,7 @@
 import { Express, Request, Response } from "express";
 import express from 'express';
 var router = express.Router();
-import { login, logout, sign_up, userProfile } from "../controllers/userController.js";
+import { log_in, logout, sign_up, userProfile } from "../controllers/userController.js";
 
 /* GET home page. */
 router.get('/', function(req: Request , res: Response, next) {
@@ -10,7 +10,7 @@ router.get('/', function(req: Request , res: Response, next) {
 
 router.post('/sign-up', sign_up);
 
-router.post('/log-in', login);
+router.post('/log-in', log_in);
 
 router.post('/log-out', logout);
 

@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
 passport.use(new LocalStrategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield matchUsername(username);
-        console.log('username:' + username);
+        console.log('user:' + JSON.stringify(user));
         if (!user) {
             return done(null, false, { message: "Incorrect username" });
         }
@@ -58,6 +58,7 @@ passport.use(new LocalStrategy((username, password, done) => __awaiter(void 0, v
             // passwords do not match!
             return done(null, false, { message: "Incorrect password" });
         }
+        console.log('idk man shit worked');
         return done(null, user);
     }
     catch (err) {
