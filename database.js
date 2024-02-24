@@ -16,9 +16,10 @@ export const pool = mysql.createPool({
     password: process.env.PASSWORD,
     database: process.env.DATABASE
 }).promise();
-const allUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+export const allUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user");
     console.log('all users:' + JSON.stringify(result));
+    return result;
 });
 export const matchUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user WHERE username = ?", [username]);

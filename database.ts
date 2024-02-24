@@ -9,9 +9,10 @@ export const pool = mysql.createPool({
     database: process.env.DATABASE
 }).promise();
 
-const allUsers = async () => {
+export const allUsers = async () => {
     const result = await pool.query("SELECT * FROM user")
     console.log('all users:' + JSON.stringify(result))
+    return result;
 }
 
 export const matchUsername = async (username: string) => {
