@@ -89,3 +89,7 @@ export const userProfile = asyncHandler(async (req: Request, res: Response, next
     const user = matchId(userId);
     console.log(user);
 })
+
+export const getChats = asyncHandler(async (req: Request, res: Response, next) => {
+    console.log(req.body)
+})
