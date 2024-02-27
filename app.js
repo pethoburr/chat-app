@@ -24,28 +24,7 @@ const ExtractJWT = passportJWT.ExtractJwt;
 import dotenv from 'dotenv';
 import { matchId, matchUsername } from './database.js';
 dotenv.config();
-import { Server } from 'socket.io';
 const app = express();
-const io = new Server(5174, {
-    cors: {
-        origin: ['https://localhost:5173']
-    }
-});
-io.on('connection', (socket) => {
-    console.log(socket.id);
-    socket.on('send-message', (message, room) => {
-        console.log(message);
-        if (room === '') {
-            socket.broadcast.emit('receive-mssage', message);
-        }
-        else {
-            socket.to(room).emit('receive-message', message);
-        }
-    });
-    socket.on('join-room', (room) => {
-        socket.join(room);
-    });
-});
 passport.use(new LocalStrategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield matchUsername(username);

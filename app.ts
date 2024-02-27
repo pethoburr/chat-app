@@ -16,30 +16,8 @@ const ExtractJWT = passportJWT.ExtractJwt;
 import dotenv from 'dotenv';
 import { matchId, matchUsername } from './database.js';
 dotenv.config()
-import { Server, Socket } from 'socket.io';
 
 const app: Express = express();
-
-const io = new Server(5174, {
-  cors: {
-    origin: ['https://localhost:5173']
-  }
-});
-
-io.on('connection', (socket: Socket) => {
-    console.log(socket.id);
-    socket.on('send-message', (message: string, room: string) => {
-      console.log(message)
-      if (room === '') {
-        socket.broadcast.emit('receive-mssage', message)
-      } else {
-        socket.to(room).emit('receive-message', message)
-      }
-    })
-    socket.on('join-room', (room: string) => {
-      socket.join(room);
-    })
-});
 
 passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {

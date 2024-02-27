@@ -6,6 +6,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'http';
+import { Server } from 'socket.io';
 // var debug = require('debug')('chat-app:server');
 
 
@@ -21,6 +22,26 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ['https://localhost:5173']
+  }
+})
+
+io.on('connection', (socket) => {
+  console.log(`socket id: ${socket.id}`);
+  socket.on('send-message', (message, room) => {
+    console.log(message)
+    if (room === '') {
+      socket.broadcast.emit('receive-message', message)
+    } else {
+      socket.to(room).emit('receive-message', message)
+    }
+  })
+  socket.on('join-room', (room) => {
+    socket.join(room);
+  })
+});
 
 /**
  * Listen on provided port, on all network interfaces.
