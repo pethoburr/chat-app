@@ -1,8 +1,6 @@
 USE chatter;
 
-CREATE TABLE Room (
+CREATE TABLE room (
     id integer PRIMARY KEY AUTO_INCREMENT,
-    msg TEXT NOT NULL,
-    stamp TIME NOT NULL,
-    room 
+    title TEXT NOT NULL,
 )
