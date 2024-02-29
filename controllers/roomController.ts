@@ -16,14 +16,18 @@ export const create_room = [
                 return;
         } else {
                 console.log(`req body: ${req.body}`)
-                const newRoom = make_room(req.body.title)
+                const newRoom = await make_room(req.body.title)
                 res.status(200).json({ newRoom })
         }
 })]
 
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
         const userId = req.params.id;
-        const rooms = user_rooms(userId)
+        const rooms = await user_rooms(userId)
         console.log(`all user rooms: ${rooms}`)
-        res.status(200).json({ rooms })
+        if (!rooms.length) {
+                res.json({ message: 'You have no conversations'});
+        } else {
+                res.status(200).json({ rooms })
+        }
 })
