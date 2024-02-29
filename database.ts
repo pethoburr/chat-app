@@ -32,6 +32,14 @@ export const register = async (first_name: string, last_name: string, username: 
     console.log('data:' + JSON.stringify(data))
 }
 
+export const make_room = async (title: string) => {
+    const data = await pool.query(`INSERT INTO room (title) VALUES ('${title}' ) `)
+    console.log('data:' + JSON.stringify(data))
+    return data;
+}
+
+
+
 // matchUsername('pethoburr');
 
 // matchId(1);

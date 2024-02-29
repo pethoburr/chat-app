@@ -1,6 +1,7 @@
 import express from 'express';
 var router = express.Router();
 import { getChats, log_in, logout, sign_up, userProfile } from "../controllers/userController.js";
+import { create_room } from "../controllers/roomController.js";
 import { allUsers } from "../database.js";
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -15,4 +16,5 @@ router.post('/send', function (req, res, next) {
 router.get('/profile/:id', userProfile);
 router.get('/users', allUsers);
 router.get('/user/:id/chats', getChats);
+router.get('/create-room', create_room);
 export default router;

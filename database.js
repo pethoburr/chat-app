@@ -35,6 +35,11 @@ export const register = (first_name, last_name, username, password) => __awaiter
     const data = yield pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES ('${first_name}', '${last_name}', '${username}', '${password}' ) `);
     console.log('data:' + JSON.stringify(data));
 });
+export const make_room = (title) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield pool.query(`INSERT INTO room (title) VALUES ('${title}' ) `);
+    console.log('data:' + JSON.stringify(data));
+    return data;
+});
 // matchUsername('pethoburr');
 // matchId(1);
 // allUsers();
