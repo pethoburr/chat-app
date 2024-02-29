@@ -1,9 +1,10 @@
-import { Express, Request, Response } from "express";
+import { Request, Response } from "express";
 import express from 'express';
 var router = express.Router();
 import { getChats, log_in, logout, sign_up, userProfile } from "../controllers/userController.js";
 import { create_room, get_rooms } from "../controllers/roomController.js";
 import { allUsers } from "../database.js";
+import { delete_msg, update_msg } from "../controllers/messagesController.js";
 
 /* GET home page. */
 router.get('/', function(req: Request , res: Response, next) {
@@ -25,5 +26,9 @@ router.get('/user/:id/chats', getChats)
 router.post('/create-room', create_room)
 
 router.get('/rooms', get_rooms)
+
+router.post('/update-message', update_msg)
+
+router.post('/delete-message', delete_msg)
 
 export default router;

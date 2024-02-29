@@ -1,9 +1,9 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { update_msg } from '../database.js';
+import { updated_msg, deleted_msg } from '../database.js';
 
-export const update_msg_post = [
+export const update_msg = [
     body("content", "msg content required")
             .trim()
             .isLength({ min: 1 })
@@ -21,7 +21,18 @@ export const update_msg_post = [
                 content: req.body.content
             }
             console.log(`req body: ${req.body}`)
-            const newRoom = await update_msg(msg)
+            const newRoom = await updated_msg(msg)
             res.status(200).json({ newRoom })
     }
 })]
+
+export const delete_msg = asyncHandler(async (req: Request, res: Response, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.status(400).json(errors.array());
+        return;
+    } else {
+        const deleted = await deleted_msg(req.params.id);
+        res.status(200).json({ deleted })
+    }
+})

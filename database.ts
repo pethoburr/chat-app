@@ -50,9 +50,14 @@ interface MsgData {
     content: string
 }
 
-export const update_msg = async (msg: MsgData) => {
+export const updated_msg = async (msg: MsgData) => {
     const updatedMsg = await pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content, msg.sender_id ])
     return updatedMsg;
+}
+
+export const deleted_msg = async (id: string) => {
+    const deletedMsg = await pool.query("DELETE FROM messages WHERE id = ?", [id]);
+    return deletedMsg;
 }
 
 

@@ -45,9 +45,13 @@ export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* ()
     console.log(`rooms: ${result}`);
     return result;
 });
-export const update_msg = (msg) => __awaiter(void 0, void 0, void 0, function* () {
+export const updated_msg = (msg) => __awaiter(void 0, void 0, void 0, function* () {
     const updatedMsg = yield pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content, msg.sender_id]);
     return updatedMsg;
+});
+export const deleted_msg = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletedMsg = yield pool.query("DELETE FROM messages WHERE id = ?", [id]);
+    return deletedMsg;
 });
 // matchUsername('pethoburr');
 // matchId(1);
