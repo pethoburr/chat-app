@@ -45,6 +45,10 @@ export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* ()
     console.log(`rooms: ${result}`);
     return result;
 });
+export const update_msg = (msg) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedMsg = yield pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content, msg.sender_id]);
+    return updatedMsg;
+});
 // matchUsername('pethoburr');
 // matchId(1);
 // allUsers();

@@ -44,6 +44,17 @@ export const user_rooms = async (id: string) => {
     return result;
 }
 
+interface MsgData {
+    sender_id: string,
+    receiver_id: string,
+    content: string
+}
+
+export const update_msg = async (msg: MsgData) => {
+    const updatedMsg = await pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content, msg.sender_id ])
+    return updatedMsg;
+}
+
 
 
 // matchUsername('pethoburr');
