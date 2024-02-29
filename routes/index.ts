@@ -24,6 +24,4 @@ router.get('/user/:id/chats', getChats)
 
 router.post('/create-room', create_room)
 
-router.post('/join-room', join_room)
-
 export default router;

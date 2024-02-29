@@ -10,11 +10,8 @@ router.get('/', function (req, res, next) {
 router.post('/sign-up', sign_up);
 router.post('/log-in', log_in);
 router.post('/log-out', logout);
-router.post('/send', function (req, res, next) {
-    res.render('index', { title: 'send message route' });
-});
 router.get('/profile/:id', userProfile);
 router.get('/users', allUsers);
 router.get('/user/:id/chats', getChats);
-router.get('/create-room', create_room);
+router.post('/create-room', create_room);
 export default router;
