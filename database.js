@@ -40,6 +40,11 @@ export const make_room = (title) => __awaiter(void 0, void 0, void 0, function* 
     console.log('data:' + JSON.stringify(data));
     return data;
 });
+export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query("SELECT * FROM user_room WHERE id = ?", [id]);
+    console.log(`rooms: ${result}`);
+    return result;
+});
 // matchUsername('pethoburr');
 // matchId(1);
 // allUsers();

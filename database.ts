@@ -38,6 +38,12 @@ export const make_room = async (title: string) => {
     return data;
 }
 
+export const user_rooms = async (id: string) => {
+    const result = await pool.query("SELECT * FROM user_room WHERE id = ?",[id])
+    console.log(`rooms: ${result}`)
+    return result;
+}
+
 
 
 // matchUsername('pethoburr');

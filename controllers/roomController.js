@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
-import { make_room } from '../database.js';
+import { make_room, user_rooms } from '../database.js';
 export const create_room = [
     body("title", "title required")
         .trim()
@@ -29,3 +29,9 @@ export const create_room = [
         }
     }))
 ];
+export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.id;
+    const rooms = user_rooms(userId);
+    console.log(`all user rooms: ${rooms}`);
+    res.status(200).json({ rooms });
+}));
