@@ -25,7 +25,7 @@ router.get('/user/:id/chats', getChats)
 
 router.post('/create-room', create_room)
 
-router.get('/rooms', get_rooms)
+router.get('/rooms/:id', get_rooms)
 
 router.post('/update-message', update_msg)
 
