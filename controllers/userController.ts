@@ -72,7 +72,7 @@ export const log_in = asyncHandler(async (req: Request, res: Response, next) => 
           }
         //   const userId = user._id.toString() 
         //   const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
-        return res.status(200).json({ message: 'success' })
+        return res.status(200).json({ user })
         })(req, res, next)
 })
 
