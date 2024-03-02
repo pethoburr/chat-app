@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
-import { matchUsername, matchId } from '../database.js';
+import { matchUsername, matchId, allUsers } from '../database.js';
 import bcrypt from 'bcryptjs';
 import passport from 'passport';
 export const sign_up = [
@@ -84,4 +84,13 @@ export const userProfile = asyncHandler((req, res, next) => __awaiter(void 0, vo
 }));
 export const getChats = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
+}));
+export const all_users = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield allUsers();
+        res.json({ users });
+    }
+    catch (err) {
+        next(err);
+    }
 }));

@@ -2,10 +2,10 @@ import { pool } from '../database.js';
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
-import { matchUsername, matchId } from '../database.js';
+import { matchUsername, matchId, allUsers } from '../database.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { match } from 'assert';
 
@@ -27,7 +27,7 @@ export const sign_up =
             .trim()
             .isLength({ min: 1 })
             .escape(),
-        asyncHandler(async (req: Request, res: Response, next) => {
+        asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
             console.log('req:' + JSON.stringify(req.body))
             bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
                 if (err) {
@@ -60,7 +60,7 @@ interface User {
     password: string
 }
 
-export const log_in = asyncHandler(async (req: Request, res: Response, next) => {
+export const log_in = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         console.log(`server request: ${JSON.stringify(req.body)}`)
         passport.authenticate('local', function (err: any, user: User, info: User) {
           if (err) { 
@@ -76,7 +76,7 @@ export const log_in = asyncHandler(async (req: Request, res: Response, next) => 
         })(req, res, next)
 })
 
-export const logout = asyncHandler(async (req: Request, res: Response, next) => {
+export const logout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['cookie'];
     if (authHeader) {
         res.clearCookie('token');
@@ -84,12 +84,21 @@ export const logout = asyncHandler(async (req: Request, res: Response, next) => 
     }
 })
 
-export const userProfile = asyncHandler(async (req: Request, res: Response, next) => {
+export const userProfile = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
     const user = matchId(userId);
     console.log(user);
 })
 
-export const getChats = asyncHandler(async (req: Request, res: Response, next) => {
+export const getChats = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.body)
+})
+
+export const all_users = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const users = await allUsers()
+        res.json({ users })
+    } catch (err) {
+        next(err)
+    }
 })

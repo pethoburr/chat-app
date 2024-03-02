@@ -3,7 +3,7 @@ import express from 'express';
 var router = express.Router();
 import { getChats, log_in, logout, sign_up, userProfile } from "../controllers/userController.js";
 import { create_room, get_rooms } from "../controllers/roomController.js";
-import { allUsers } from "../database.js";
+import { all_users } from "../controllers/userController.js";
 import { delete_msg, update_msg } from "../controllers/messagesController.js";
 
 /* GET home page. */
@@ -19,7 +19,7 @@ router.post('/log-out', logout);
 
 router.get('/profile/:id', userProfile);
 
-router.get('/users', allUsers)
+router.get('/users', all_users)
 
 router.get('/user/:id/chats', getChats)
 

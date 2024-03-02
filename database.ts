@@ -1,4 +1,5 @@
 import mysql from 'mysql2'
+import { RowDataPacket } from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config()
 
@@ -10,7 +11,7 @@ export const pool = mysql.createPool({
 }).promise();
 
 export const allUsers = async () => {
-    const result = await pool.query("SELECT * FROM user")
+    const result = await pool.query("SELECT * FROM user") as RowDataPacket[]
     console.log('all users:' + JSON.stringify(result))
     return result;
 }
@@ -39,7 +40,7 @@ export const make_room = async (title: string) => {
 }
 
 export const user_rooms = async (id: string) => {
-    const result = await pool.query("SELECT * FROM user_room WHERE id = ?",[id])
+    const result = await pool.query("SELECT * FROM user_conversation WHERE id = ?",[id])
     console.log(`rooms: ${result}`)
     return result;
 }

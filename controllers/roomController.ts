@@ -23,6 +23,7 @@ export const create_room = [
 
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
         const userId = req.params.id;
+        console.log(`userId: ${userId}`)
         const rooms = await user_rooms(userId)
         console.log(`all user rooms: ${rooms}`)
         if (!rooms.length) {
