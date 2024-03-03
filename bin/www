@@ -55,6 +55,13 @@ io.on('connection', (socket) => {
       socket.to(room).emit('receive-message', message)
     }
   })
+
+  socket.on('create-room', (roomName) => {
+    socket.join(roomName);
+    io.to(roomName).emit('new-room', roomName);
+    console.log(`new room created: ${roomName}`)
+  })
+
   socket.on('join-room', (room) => {
     socket.join(room);
   })
