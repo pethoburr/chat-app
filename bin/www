@@ -41,9 +41,9 @@ pool.getConnection((err, connection) => {
 
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
-  socket.on('send-message', (message, room) => {
+  socket.on('send-message', (message) => {
     console.log(message)
-    pool.query('INSERT INTO messages (content, room) VALUES (?, ?)', [message, room], (error, results, fields) => {
+    pool.query('INSERT INTO messages (content, room) VALUES (?, ?)', [message], (error, results, fields) => {
       if (error) {
         console.error('Error saving message to database:', error);
         return;
