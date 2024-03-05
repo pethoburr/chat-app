@@ -12,7 +12,6 @@ export const pool = mysql.createPool({
 
 export const allUsers = async () => {
     const result = await pool.query("SELECT * FROM user") as RowDataPacket[]
-    console.log('all users:' + JSON.stringify(result))
     return result;
 }
 
