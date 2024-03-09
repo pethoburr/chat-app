@@ -44,6 +44,13 @@ export const user_rooms = async (id: string) => {
     return result;
 }
 
+export const groupchat = async (userId: string, roomId: string) => {
+    const newGroup = await pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES ('${userId}', '${roomId}')`)
+    console.log(`new group: ${newGroup}`)
+    return newGroup;
+}
+
+
 interface MsgData {
     sender_id: string,
     receiver_id: string,

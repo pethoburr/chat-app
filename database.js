@@ -18,7 +18,6 @@ export const pool = mysql.createPool({
 }).promise();
 export const allUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user");
-    console.log('all users:' + JSON.stringify(result));
     return result;
 });
 export const matchUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
@@ -44,6 +43,11 @@ export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* ()
     const result = yield pool.query("SELECT * FROM user_conversation WHERE id = ?", [id]);
     console.log(`rooms: ${result}`);
     return result;
+});
+export const groupchat = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const newGroup = yield pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES ('${userId}', '${roomId}')`);
+    console.log(`new group: ${newGroup}`);
+    return newGroup;
 });
 export const updated_msg = (msg) => __awaiter(void 0, void 0, void 0, function* () {
     const updatedMsg = yield pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content, msg.sender_id]);
