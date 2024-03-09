@@ -40,8 +40,15 @@ export const make_room = async (title: string) => {
 
 export const user_rooms = async (id: string) => {
     const result = await pool.query("SELECT * FROM user_conversation WHERE id = ?",[id])
+    
     console.log(`rooms: ${result}`)
     return result;
+}
+
+export const getRoom = async (roomName: string) => {
+    const room = await pool.query('SELECT * FROM room WHERE title = ?', [roomName])
+    console.log(`specific room: ${room}`)
+    return room;
 }
 
 export const groupchat = async (userId: string, roomId: string) => {
@@ -65,6 +72,18 @@ export const updated_msg = async (msg: MsgData) => {
 export const deleted_msg = async (id: string) => {
     const deletedMsg = await pool.query("DELETE FROM messages WHERE id = ?", [id]);
     return deletedMsg;
+}
+
+export const save_room = async (roomName: string) => {
+    const result = await pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
+    console.log(`saved room: ${result}`);
+    return result;
+}
+
+export const add_user_convo = async (userId: string, roomId: string) => {
+    const result = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
+    console.log(`room created result: ${result}`)
+    return result;
 }
 
 

@@ -44,6 +44,11 @@ export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* ()
     console.log(`rooms: ${result}`);
     return result;
 });
+export const getRoom = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
+    const room = yield pool.query('SELECT * FROM room WHERE title = ?', [roomName]);
+    console.log(`specific room: ${room}`);
+    return room;
+});
 export const groupchat = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const newGroup = yield pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES ('${userId}', '${roomId}')`);
     console.log(`new group: ${newGroup}`);
@@ -56,6 +61,16 @@ export const updated_msg = (msg) => __awaiter(void 0, void 0, void 0, function* 
 export const deleted_msg = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const deletedMsg = yield pool.query("DELETE FROM messages WHERE id = ?", [id]);
     return deletedMsg;
+});
+export const save_room = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
+    console.log(`saved room: ${result}`);
+    return result;
+});
+export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
+    console.log(`room created result: ${result}`);
+    return result;
 });
 // matchUsername('pethoburr');
 // matchId(1);

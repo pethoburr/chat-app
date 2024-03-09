@@ -6,7 +6,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'http';
-import { pool } from '../database.js';
+import { add_user_convo, getRoom, pool, save_room } from '../database.js';
 import { Server } from 'socket.io';
 // var debug = require('debug')('chat-app:server');
 
@@ -53,24 +53,15 @@ io.on('connection', (socket) => {
     socket.to(message.receiver_id).emit('receive-message', message)
   })
 
-  socket.on('create-room', (roomName, roomId, userId) => {
+  socket.on('create-room', async (roomName, userId) => {
     socket.join(roomName);
-    pool.query('INSERT INTO room (title) VALUE (?)', [roomName], (error, results, fields) => {
-      if (error) {
-        console.error('Error saving room to database:', error);
-        return;
-      }
-      console.log('Room saved to database');
-    });
-    pool.query('INSERT INTO user_conversation (userId, roomId) VALUES (?, ?)', [userId, roomId], (error, results, fields) => {
-      if (error) {
-        console.error('Error saving convo to database:', error);
-        return;
-      }
-      console.log('User convo saved to database');
-    });
+    let shiey = '';
+    const saved_room = await save_room(roomName)
+    shiey = await getRoom(roomName)
+    const roomId = shiey[0][0].id;
+    const result = await add_user_convo(userId, roomId)
     io.to(roomName).emit('new-room', roomName);
-    console.log(`new room created: ${roomName}`)
+    console.log(`new room created: ${roomName}, and shiey: ${JSON.stringify(shiey[0][0])} plus da result boi: ${JSON.stringify(result)}`)
   })
 
   socket.on('join-room', (roomName) => {
