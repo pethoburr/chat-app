@@ -53,19 +53,33 @@ io.on('connection', (socket) => {
     socket.to(message.receiver_id).emit('receive-message', message)
   })
 
-  socket.on('create-room', (roomName) => {
+  socket.on('create-room', (roomName, roomId, userId) => {
     socket.join(roomName);
+    pool.query('INSERT INTO room (title) VALUE (?)', [roomName], (error, results, fields) => {
+      if (error) {
+        console.error('Error saving room to database:', error);
+        return;
+      }
+      console.log('Room saved to database');
+    });
+    pool.query('INSERT INTO user_conversation (userId, roomId) VALUES (?, ?)', [userId, roomId], (error, results, fields) => {
+      if (error) {
+        console.error('Error saving convo to database:', error);
+        return;
+      }
+      console.log('User convo saved to database');
+    });
     io.to(roomName).emit('new-room', roomName);
     console.log(`new room created: ${roomName}`)
   })
 
-  socket.on('join-room', (room) => {
-    socket.join(room);
+  socket.on('join-room', (roomName) => {
+    socket.join(roomName);
   })
 
-  socket.on('leave-room', (room) => {
-    socket.leave(room);
-    console.log(`User ${socket.id} left room ${room}`)
+  socket.on('leave-room', (roomName) => {
+    socket.leave(roomName);
+    console.log(`User ${socket.id} left room ${roomName}`)
   })
 });
 
