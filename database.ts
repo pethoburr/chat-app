@@ -1,4 +1,4 @@
-import mysql from 'mysql2'
+import mysql, { FieldPacket } from 'mysql2'
 import { RowDataPacket } from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config()
@@ -39,8 +39,7 @@ export const make_room = async (title: string) => {
 }
 
 export const user_rooms = async (id: string) => {
-    const result = await pool.query("SELECT * FROM user_conversation WHERE id = ?",[id])
-    
+    const result = await pool.query("SELECT * FROM user_conversation WHERE user_id = ?",[id])
     console.log(`rooms: ${result}`)
     return result;
 }
@@ -84,6 +83,12 @@ export const add_user_convo = async (userId: string, roomId: string) => {
     const result = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
     console.log(`room created result: ${result}`)
     return result;
+}
+
+export const room_name = async (roomId: string) => {
+    const data = await pool.query<RowDataPacket[]>('SELECT * FROM room WHERE id = ?', [roomId])
+    console.log(`roomanme: ${JSON.stringify(data[0])}`)
+    return data[0];
 }
 
 

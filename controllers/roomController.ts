@@ -1,7 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { make_room, user_rooms } from '../database.js';
+import { make_room, room_name, user_rooms } from '../database.js';
+import { RowDataPacket } from 'mysql2';
 
 export const create_room = [
     body("title", "title required")
@@ -22,13 +23,27 @@ export const create_room = [
 })]
 
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
+        const roomNames: string[] = [];
         const userId = req.params.id;
         console.log(`userId: ${userId}`)
         const rooms = await user_rooms(userId)
-        console.log(`all user rooms: ${rooms}`)
-        if (!rooms.length) {
-                res.json({ message: 'You have no conversations'});
-        } else {
-                res.status(200).json({ rooms })
+        console.log(`all user rooms: ${JSON.stringify(rooms[0])}`)
+        const arr: RowDataPacket[] = rooms[0] as RowDataPacket[]
+        if (Array.isArray(arr)) {
+                arr.map(async (convo) => {
+                        const name = await room_name(convo.room_id)
+                        console.log(`name: ${JSON.stringify(name[0].title)}`)
+                        if (typeof name[0].title === 'string') {
+                                roomNames.push(name[0].title)
+                        }
+                })
         }
+        console.log(`room names: ${roomNames}`)
+        res.status(200).json({ roomNames })
+        // if (!rooms.length) {
+        //         res.json({ message: 'You have no conversations'});
+        // } else {
+        //         res.status(200).json({ roomNames })
+        // }
 })
+

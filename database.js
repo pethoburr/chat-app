@@ -40,7 +40,7 @@ export const make_room = (title) => __awaiter(void 0, void 0, void 0, function* 
     return data;
 });
 export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield pool.query("SELECT * FROM user_conversation WHERE id = ?", [id]);
+    const result = yield pool.query("SELECT * FROM user_conversation WHERE user_id = ?", [id]);
     console.log(`rooms: ${result}`);
     return result;
 });
@@ -71,6 +71,11 @@ export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void
     const result = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
     console.log(`room created result: ${result}`);
     return result;
+});
+export const room_name = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield pool.query('SELECT * FROM room WHERE id = ?', [roomId]);
+    console.log(`roomanme: ${JSON.stringify(data[0])}`);
+    return data[0];
 });
 // matchUsername('pethoburr');
 // matchId(1);
