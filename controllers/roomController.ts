@@ -22,20 +22,23 @@ export const create_room = [
         }
 })]
 
-const roomNames: string[] = [];
+
+
 
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
+        const roomNames: string[] = [];
         const userId = req.params.id;
         console.log(`userId: ${userId}`)
         const rooms = await user_rooms(userId)
         console.log(`all user rooms: ${JSON.stringify(rooms[0])}`)
         const arr: RowDataPacket[] = rooms[0] as RowDataPacket[]
         if (Array.isArray(arr)) {
-                arr.map(async (convo) => {
+                await Promise.all(arr.map(async (convo) => {
                         const name = await room_name(convo.room_id)
                         console.log(`name: ${JSON.stringify(name[0].title)}`)
                         roomNames.push(name[0].title)
-                })
+                }))
+                
         }
         console.log(`room names: ${roomNames}`)
         res.status(200).json({ roomNames })
