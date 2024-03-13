@@ -29,8 +29,8 @@ export const create_room = [
         }
     }))
 ];
+const roomNames = [];
 export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const roomNames = [];
     const userId = req.params.id;
     console.log(`userId: ${userId}`);
     const rooms = yield user_rooms(userId);
@@ -40,16 +40,9 @@ export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void
         arr.map((convo) => __awaiter(void 0, void 0, void 0, function* () {
             const name = yield room_name(convo.room_id);
             console.log(`name: ${JSON.stringify(name[0].title)}`);
-            if (typeof name[0].title === 'string') {
-                roomNames.push(name[0].title);
-            }
+            roomNames.push(name[0].title);
         }));
     }
     console.log(`room names: ${roomNames}`);
     res.status(200).json({ roomNames });
-    // if (!rooms.length) {
-    //         res.json({ message: 'You have no conversations'});
-    // } else {
-    //         res.status(200).json({ roomNames })
-    // }
 }));

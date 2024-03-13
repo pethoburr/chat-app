@@ -22,8 +22,9 @@ export const create_room = [
         }
 })]
 
+const roomNames: string[] = [];
+
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
-        const roomNames: string[] = [];
         const userId = req.params.id;
         console.log(`userId: ${userId}`)
         const rooms = await user_rooms(userId)
@@ -33,17 +34,10 @@ export const get_rooms = asyncHandler(async (req: Request, res: Response, next) 
                 arr.map(async (convo) => {
                         const name = await room_name(convo.room_id)
                         console.log(`name: ${JSON.stringify(name[0].title)}`)
-                        if (typeof name[0].title === 'string') {
-                                roomNames.push(name[0].title)
-                        }
+                        roomNames.push(name[0].title)
                 })
         }
         console.log(`room names: ${roomNames}`)
         res.status(200).json({ roomNames })
-        // if (!rooms.length) {
-        //         res.json({ message: 'You have no conversations'});
-        // } else {
-        //         res.status(200).json({ roomNames })
-        // }
 })
 
