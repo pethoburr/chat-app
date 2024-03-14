@@ -6,7 +6,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'http';
-import { add_user_convo, getRoom, pool, save_room } from '../database.js';
+import { add_user_convo, getRoom, pool, save_room, add_group } from '../database.js';
 import { Server } from 'socket.io';
 // var debug = require('debug')('chat-app:server');
 
@@ -53,13 +53,16 @@ io.on('connection', (socket) => {
     socket.to(message.receiver_id).emit('receive-message', message)
   })
 
-  socket.on('create-room', async (roomName, userId) => {
+  socket.on('create-room', async (roomName, userId, ppl) => {
+    console.log(`peeps: ${ppl}`)
     socket.join(roomName);
     let shiey = '';
     const saved_room = await save_room(roomName)
     shiey = await getRoom(roomName)
     const roomId = shiey[0][0].id;
     const result = await add_user_convo(userId, roomId)
+    const grouped = await add_group(ppl, roomId)
+    console.log(`grouped: ${grouped}`)
     io.to(roomName).emit('new-room', roomName);
     console.log(`new room created: ${roomName}, and shiey: ${JSON.stringify(shiey[0][0])} plus da result boi: ${JSON.stringify(result)}`)
   })

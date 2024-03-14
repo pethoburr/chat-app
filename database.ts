@@ -91,7 +91,21 @@ export const room_name = async (roomId: string) => {
     return data[0];
 }
 
+const getId = async(name: string) => {
+    const id = await pool.query(`SELECT id FROM user WHERE username = ?`, [name])
+    console.log(`name to id: ${id}`)
+    return id;
+}
 
+export const add_group = async (ppl: string[], roomId: string) => {
+    const allIdz: number[] = []
+    ppl.map((name: string) => {
+        const id = getId(name)
+        console.log(`id: ${id}`)
+        // allIdz.push(id)
+    })
+    // allIdz.map()
+}
 
 // matchUsername('pethoburr');
 
