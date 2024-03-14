@@ -92,23 +92,19 @@ export const room_name = async (roomId: string) => {
 }
 
 const getId = async(name: string) => {
-    const id = await pool.query(`SELECT id FROM user WHERE username = ?`, [name])
-    console.log(`name to id: ${id}`)
-    return id;
+    const id = await pool.query<RowDataPacket[]>(`SELECT id FROM user WHERE username = ?`, [name])
+    console.log(`name to id: ${JSON.stringify(id)}`)
+    return id[0][0].id;
 }
 
 export const add_group = async (ppl: string[], roomId: string) => {
     const allIdz: number[] = []
-    ppl.map((name: string) => {
-        const id = getId(name)
-        console.log(`id: ${id}`)
-        // allIdz.push(id)
-    })
+    await Promise.all(
+        ppl.map(async (name: string) => {
+            const id = await getId(name)
+            console.log(`id: ${id}}`)
+            // allIdz.push(id)
+        })
+    ) 
     // allIdz.map()
 }
-
-// matchUsername('pethoburr');
-
-// matchId(1);
-
-// allUsers();

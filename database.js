@@ -79,18 +79,15 @@ export const room_name = (roomId) => __awaiter(void 0, void 0, void 0, function*
 });
 const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const id = yield pool.query(`SELECT id FROM user WHERE username = ?`, [name]);
-    console.log(`name to id: ${id}`);
-    return id;
+    console.log(`name to id: ${JSON.stringify(id)}`);
+    return id[0][0].id;
 });
 export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const allIdz = [];
-    ppl.map((name) => {
-        const id = getId(name);
-        console.log(`id: ${id}`);
+    yield Promise.all(ppl.map((name) => __awaiter(void 0, void 0, void 0, function* () {
+        const id = yield getId(name);
+        console.log(`id: ${id}}`);
         // allIdz.push(id)
-    });
+    })));
     // allIdz.map()
 });
-// matchUsername('pethoburr');
-// matchId(1);
-// allUsers();
