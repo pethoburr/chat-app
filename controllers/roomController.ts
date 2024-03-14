@@ -22,9 +22,6 @@ export const create_room = [
         }
 })]
 
-
-
-
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
         const roomNames: string[] = [];
         const userId = req.params.id;
