@@ -98,13 +98,17 @@ const getId = async(name: string) => {
 }
 
 export const add_group = async (ppl: string[], roomId: string) => {
+    const room_id = parseInt(roomId)
     const allIdz: number[] = []
     await Promise.all(
         ppl.map(async (name: string) => {
             const id = await getId(name)
-            console.log(`id: ${id}}`)
-            // allIdz.push(id)
+            allIdz.push(id)
         })
-    ) 
-    // allIdz.map()
+    )
+    console.log(`all ids: ${allIdz}`)
+    await Promise.all(allIdz.map(async (id: number) => {
+        const convo = await pool.query<RowDataPacket[]>('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)',[id, room_id])
+        console.log(`convo: ${JSON.stringify(convo)}`)
+    }))
 }

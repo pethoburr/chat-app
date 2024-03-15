@@ -83,11 +83,15 @@ const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
     return id[0][0].id;
 });
 export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const room_id = parseInt(roomId);
     const allIdz = [];
     yield Promise.all(ppl.map((name) => __awaiter(void 0, void 0, void 0, function* () {
         const id = yield getId(name);
-        console.log(`id: ${id}}`);
-        // allIdz.push(id)
+        allIdz.push(id);
     })));
-    // allIdz.map()
+    console.log(`all ids: ${allIdz}`);
+    yield Promise.all(allIdz.map((id) => __awaiter(void 0, void 0, void 0, function* () {
+        const convo = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [id, room_id]);
+        console.log(`convo: ${JSON.stringify(convo)}`);
+    })));
 });
