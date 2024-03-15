@@ -41,8 +41,16 @@ export const make_room = (title) => __awaiter(void 0, void 0, void 0, function* 
 });
 export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user_conversation WHERE user_id = ?", [id]);
-    console.log(`rooms: ${result}`);
-    return result;
+    console.log(`rooms: ${JSON.stringify(result[0])}`);
+    if (!Array.isArray(result[0])) {
+        throw new Error("unexpected result format from db query");
+    }
+    const rooms = result[0].map((row) => ({
+        id: row.id,
+        user_id: row.user_id,
+        room_id: row.room_id
+    }));
+    return rooms;
 });
 export const getRoom = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
     const room = yield pool.query('SELECT * FROM room WHERE title = ?', [roomName]);
@@ -72,8 +80,8 @@ export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void
     console.log(`room created result: ${result}`);
     return result;
 });
-export const room_name = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield pool.query('SELECT * FROM room WHERE id = ?', [roomId]);
+export const room_name = (room) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield pool.query('SELECT * FROM room WHERE id = ?', [room.room_id]);
     console.log(`roomanme: ${JSON.stringify(data[0])}`);
     return data[0];
 });

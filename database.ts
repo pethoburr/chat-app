@@ -40,8 +40,16 @@ export const make_room = async (title: string) => {
 
 export const user_rooms = async (id: string) => {
     const result = await pool.query("SELECT * FROM user_conversation WHERE user_id = ?",[id])
-    console.log(`rooms: ${result}`)
-    return result;
+    console.log(`rooms: ${JSON.stringify(result[0])}`)
+    if (!Array.isArray(result[0])) {
+        throw new Error("unexpected result format from db query")
+    }
+    const rooms: Room[] = result[0].map((row: any) => ({
+        id: row.id,
+        user_id: row.user_id,
+        room_id: row.room_id
+    }));
+    return rooms;
 }
 
 export const getRoom = async (roomName: string) => {
@@ -85,8 +93,14 @@ export const add_user_convo = async (userId: string, roomId: string) => {
     return result;
 }
 
-export const room_name = async (roomId: string) => {
-    const data = await pool.query<RowDataPacket[]>('SELECT * FROM room WHERE id = ?', [roomId])
+interface Room {
+    id: number,
+    user_id: number,
+    room_id: number
+}
+
+export const room_name = async (room: Room) => {
+    const data = await pool.query<RowDataPacket[]>('SELECT * FROM room WHERE id = ?', [room.room_id])
     console.log(`roomanme: ${JSON.stringify(data[0])}`)
     return data[0];
 }

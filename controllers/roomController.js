@@ -34,15 +34,14 @@ export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void
     const userId = req.params.id;
     console.log(`userId: ${userId}`);
     const rooms = yield user_rooms(userId);
-    console.log(`all user rooms: ${JSON.stringify(rooms[0])}`);
-    const arr = rooms[0];
-    if (Array.isArray(arr)) {
-        yield Promise.all(arr.map((convo) => __awaiter(void 0, void 0, void 0, function* () {
-            const name = yield room_name(convo.room_id);
+    console.log(`all user rooms: ${JSON.stringify(rooms)}`);
+    if (Array.isArray(rooms)) {
+        yield Promise.all(rooms.map((convo) => __awaiter(void 0, void 0, void 0, function* () {
+            const name = yield room_name(convo);
             console.log(`name: ${JSON.stringify(name[0].title)}`);
             roomNames.push(name[0].title);
         })));
     }
     console.log(`room names: ${roomNames}`);
-    res.status(200).json({ roomNames });
+    res.status(200).json({ rooms, roomNames });
 }));
