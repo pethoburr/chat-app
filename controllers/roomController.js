@@ -30,7 +30,7 @@ export const create_room = [
     }))
 ];
 export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const roomNames = [];
+    const room = [];
     const userId = req.params.id;
     console.log(`userId: ${userId}`);
     const rooms = yield user_rooms(userId);
@@ -39,9 +39,9 @@ export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void
         yield Promise.all(rooms.map((convo) => __awaiter(void 0, void 0, void 0, function* () {
             const name = yield room_name(convo);
             console.log(`name: ${JSON.stringify(name[0].title)}`);
-            roomNames.push(name[0].title);
+            room.push({ id: name[0].id, title: name[0].title });
         })));
     }
-    console.log(`room names: ${roomNames}`);
-    res.status(200).json({ rooms, roomNames });
+    console.log(`room names: ${room}`);
+    res.status(200).json({ room });
 }));
