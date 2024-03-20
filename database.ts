@@ -130,5 +130,9 @@ export const add_group = async (ppl: string[], roomId: string) => {
 export const checkId = async (id: number) => {
     const result = await pool.query<RowDataPacket[]>('SELECT * FROM room WHERE id = ?', [id])
     console.log(`is it thurr: ${JSON.stringify(result)}`)
-    return result[0][0];
+    if (result[0][0].length) {
+        return result[0][0];
+    } else {
+        return null;
+    }
 }

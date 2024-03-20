@@ -106,5 +106,10 @@ export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, func
 export const checkId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('SELECT * FROM room WHERE id = ?', [id]);
     console.log(`is it thurr: ${JSON.stringify(result)}`);
-    return result[0][0];
+    if (result[0][0].length) {
+        return result[0][0];
+    }
+    else {
+        return null;
+    }
 });
