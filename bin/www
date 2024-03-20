@@ -42,7 +42,7 @@ pool.getConnection((err, connection) => {
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
   socket.on('send-message', async (message, roomId) => {
-    if (!roomId) {
+    if (roomId) {
       const yayOrNay = await checkId(roomId);
       console.log(`watiteiuh: ${JSON.stringify(yayOrNay)}`)
       console.log(message)
