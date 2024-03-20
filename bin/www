@@ -6,7 +6,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'http';
-import { add_user_convo, getRoom, pool, save_room, add_group } from '../database.js';
+import { add_user_convo, getRoom, pool, save_room, add_group, checkId } from '../database.js';
 import { Server } from 'socket.io';
 // var debug = require('debug')('chat-app:server');
 
@@ -41,16 +41,23 @@ pool.getConnection((err, connection) => {
 
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
-  socket.on('send-message', (message, roomId) => {
-    console.log(message)
-    pool.query('INSERT INTO messages (sender_id, receiver_id, content, room_id) VALUES (?, ?, ?, ?)', [message.sender_id, message.receiver_id, message.content, roomId], (error, results, fields) => {
+  socket.on('send-message', async (message, roomId) => {
+    if (!roomId) {
+      const yayOrNay = await checkId(roomId);
+      console.log(`watiteiuh: ${JSON.stringify(yayOrNay)}`)
+      console.log(message)
+      pool.query('INSERT INTO messages (sender_id, receiver_id, content, room_id) VALUES (?, ?, ?, ?)', [message.sender_id, message.receiver_id, message.content, roomId], (error, results, fields) => {
       if (error) {
         console.error('Error saving message to database:', error);
         return;
       }
       console.log('Message saved to database');
-    });
-    socket.to(message.receiver_id).emit('receive-message', message)
+      });
+      socket.to(message.receiver_id).emit('receive-message', message)
+    } else {
+      return;
+    }
+    
   })
 
   socket.on('create-room', async (roomName, userId, ppl) => {

@@ -126,3 +126,8 @@ export const add_group = async (ppl: string[], roomId: string) => {
         console.log(`convo: ${JSON.stringify(convo)}`)
     }))
 }
+
+export const checkId = async (id: number) => {
+    const result = await pool.query('SELECT * FROM room WHERE id = ?', [id])
+    console.log(`is it thurr: ${JSON.stringify(result)}`)
+}
