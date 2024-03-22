@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { updated_msg, deleted_msg } from '../database.js';
+import { updated_msg, deleted_msg, get_messages } from '../database.js';
 
 export const update_msg = [
     body("content", "msg content required")
@@ -34,5 +34,16 @@ export const delete_msg = asyncHandler(async (req: Request, res: Response, next)
     } else {
         const deleted = await deleted_msg(req.params.id);
         res.status(200).json({ deleted })
+    }
+})
+
+export const get_message = asyncHandler(async (req: Request, res: Response, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.status(400).json(errors.array())
+        return;
+    } else {
+        const msgs = await get_messages(req.params.roomId)
+        res.status(200).json({ msgs })
     }
 })

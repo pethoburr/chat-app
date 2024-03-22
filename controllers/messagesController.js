@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
-import { updated_msg, deleted_msg } from '../database.js';
+import { updated_msg, deleted_msg, get_messages } from '../database.js';
 export const update_msg = [
     body("content", "msg content required")
         .trim()
@@ -43,5 +43,16 @@ export const delete_msg = asyncHandler((req, res, next) => __awaiter(void 0, voi
     else {
         const deleted = yield deleted_msg(req.params.id);
         res.status(200).json({ deleted });
+    }
+}));
+export const get_message = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(400).json(errors.array());
+        return;
+    }
+    else {
+        const msgs = yield get_messages(req.params.roomId);
+        res.status(200).json({ msgs });
     }
 }));

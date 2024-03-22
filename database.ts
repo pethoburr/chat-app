@@ -136,3 +136,8 @@ export const checkId = async (id: number) => {
         return null;
     }
 }
+
+export const get_messages = async (roomId: string) => {
+    const msgs = await pool.query('SELECT * FROM messages WHERE room_id = ?', [roomId])
+    console.log(`goteee ${JSON.stringify(msgs)}`)
+}
