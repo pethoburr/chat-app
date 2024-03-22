@@ -115,5 +115,6 @@ export const checkId = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 export const get_messages = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const msgs = yield pool.query('SELECT * FROM messages WHERE room_id = ?', [roomId]);
-    console.log(`goteee ${JSON.stringify(msgs)}`);
+    console.log(`goteee ${JSON.stringify(msgs[0])}`);
+    return msgs[0];
 });
