@@ -42,12 +42,11 @@ pool.getConnection((err, connection) => {
 
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
-  socket.on('send-message', async (message, roomId) => {
-    const id = null;
+  socket.on('send-message', async (message) => {
     if (roomId) {
         console.log(`watiteiuh: ${JSON.stringify(yayOrNay)}`)
         console.log(message)
-        pool.query('INSERT INTO messages (sender_id, receiver_id, content, room_id) VALUES (?, ?, ?, ?)', [message.sender_id, message.receiver_id, message.content, roomId], (error, results, fields) => {
+        pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [message.content, message.room_id], (error, results, fields) => {
         if (error) {
           console.error('Error saving message to database:', error);
           return;
