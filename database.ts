@@ -66,13 +66,24 @@ export const groupchat = async (userId: string, roomId: string) => {
 
 
 interface MsgData {
-    sender_id: string,
-    receiver_id: string,
-    content: string
+    user_id: number,
+    content: string,
+    room_id: number
+}
+
+export const save_msg = async(msg: MsgData) => {
+    const saved_msg = await pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id])
+    const checker = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
+    if (checker[0][0].length > 0) {
+        return;
+    } else {
+        const saved_convo = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id])
+        return { saved_msg, saved_convo};
+    }
 }
 
 export const updated_msg = async (msg: MsgData) => {
-    const updatedMsg = await pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content, msg.sender_id ])
+    const updatedMsg = await pool.query("UPDATE messages SET content = ? WHERE id = ?", [msg.content])
     return updatedMsg;
 }
 
