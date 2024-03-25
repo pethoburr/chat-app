@@ -16,8 +16,8 @@ export const update_msg = [
             return;
     } else {
             const msg = {
-                sender_id: req.body.senderId,
-                receiver_id: req.body.receiver_id,
+                user_id: req.body.user_id,
+                room_id: req.body.room_id,
                 content: req.body.content
             }
             console.log(`req body: ${req.body}`)
