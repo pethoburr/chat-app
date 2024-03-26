@@ -6,7 +6,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'http';
-import { add_user_convo, getRoom, pool, save_room, add_group, checkId } from '../database.js';
+import { add_user_convo, getRoom, pool, save_room, add_group, checkId, save_msg } from '../database.js';
 import { Server } from 'socket.io';
 import { check } from 'express-validator';
 // var debug = require('debug')('chat-app:server');
@@ -42,24 +42,16 @@ pool.getConnection((err, connection) => {
 
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
-  socket.on('send-message', async (message) => {
-    if (roomId) {
-        console.log(`watiteiuh: ${JSON.stringify(yayOrNay)}`)
-        console.log(message)
-        pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [message.content, message.room_id], (error, results, fields) => {
-        if (error) {
-          console.error('Error saving message to database:', error);
-          return;
-        }
-        console.log('Message saved to database');
-        });
-        socket.to(message.receiver_id).emit('receive-message', message)
+  socket.on('send-message', async (message, roomName) => {
+    if (roomName) {
+        console.log(`watiteiuh: ${JSON.stringify(message)}`)
+        const savedMsg = await save_msg(message)
+        socket.to(roomName).emit('receive-message', message)
     } else {
       return;
     }
     
   })
-
   const roomCreator = async(name, id, peeps) => {
     const room = await checkId(id)
     if (room.id) { return; }
