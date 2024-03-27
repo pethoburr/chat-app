@@ -30,18 +30,14 @@ interface Room {
 export const get_rooms = asyncHandler(async (req: Request, res: Response, next) => {
         const room: Room[] = [];
         const userId = req.params.id;
-        console.log(`userId: ${userId}`)
         const rooms = await user_rooms(userId)
-        console.log(`all user rooms: ${JSON.stringify(rooms)}`)
         if (Array.isArray(rooms)) {
                 await Promise.all(rooms.map(async (convo) => {
                         const name = await room_name(convo)
-                        console.log(`name: ${JSON.stringify(name[0].title)}`)
                         room.push({ id: name[0].id, title: name[0].title})
                 }))
                 
         }
-        console.log(`room names: ${room}`)
         res.status(200).json({ room })
 })
 

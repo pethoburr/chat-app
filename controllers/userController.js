@@ -12,6 +12,7 @@ import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
 import { matchUsername, matchId, allUsers } from '../database.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import passport from 'passport';
 export const sign_up = [
     body("first_name", "Must enter name")
@@ -34,12 +35,10 @@ export const sign_up = [
         console.log('req:' + JSON.stringify(req.body));
         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
             if (err) {
-                console.log('ye here');
                 return next(err);
             }
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                console.log('uhm here');
                 res.status(400).json(errors.array());
                 return;
             }
@@ -65,9 +64,9 @@ export const log_in = asyncHandler((req, res, next) => __awaiter(void 0, void 0,
             console.log(`info: ${JSON.stringify(info)}`);
             return res.status(400).json(info);
         }
-        //   const userId = user._id.toString() 
-        //   const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
-        return res.status(200).json({ user });
+        const userId = user._id.toString();
+        const token = jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+        return res.status(200).json({ user, token });
     })(req, res, next);
 }));
 export const logout = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -83,7 +82,8 @@ export const userProfile = asyncHandler((req, res, next) => __awaiter(void 0, vo
     console.log(user);
 }));
 export const getChats = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+    const id = req.params.userId;
+    console.log(`id: ${id}`);
 }));
 export const all_users = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

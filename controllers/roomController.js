@@ -32,16 +32,12 @@ export const create_room = [
 export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const room = [];
     const userId = req.params.id;
-    console.log(`userId: ${userId}`);
     const rooms = yield user_rooms(userId);
-    console.log(`all user rooms: ${JSON.stringify(rooms)}`);
     if (Array.isArray(rooms)) {
         yield Promise.all(rooms.map((convo) => __awaiter(void 0, void 0, void 0, function* () {
             const name = yield room_name(convo);
-            console.log(`name: ${JSON.stringify(name[0].title)}`);
             room.push({ id: name[0].id, title: name[0].title });
         })));
     }
-    console.log(`room names: ${room}`);
     res.status(200).json({ room });
 }));

@@ -31,12 +31,10 @@ export const sign_up =
             console.log('req:' + JSON.stringify(req.body))
             bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
                 if (err) {
-                    console.log('ye here') 
                     return next(err)
                 }
                 const errors = validationResult(req);
                 if (!errors.isEmpty()) {
-                    console.log('uhm here')
                     res.status(400).json(errors.array());
                     return;
                 } else {
@@ -70,9 +68,9 @@ export const log_in = asyncHandler(async (req: Request, res: Response, next: Nex
             console.log(`info: ${JSON.stringify(info)}`);
             return res.status(400).json(info);
           }
-        //   const userId = user._id.toString() 
-        //   const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
-        return res.status(200).json({ user })
+          const userId = user._id.toString() 
+          const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
+        return res.status(200).json({ user, token })
         })(req, res, next)
 })
 
@@ -91,7 +89,8 @@ export const userProfile = asyncHandler(async (req: Request, res: Response, next
 })
 
 export const getChats = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body)
+    const id = req.params.userId
+    console.log(`id: ${id}`)
 })
 
 export const all_users = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -102,3 +101,5 @@ export const all_users = asyncHandler(async (req: Request, res: Response, next: 
         next(err)
     }
 })
+
+

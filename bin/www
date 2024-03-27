@@ -48,24 +48,34 @@ io.on('connection', (socket) => {
         const savedMsg = await save_msg(message)
         socket.to(roomName).emit('receive-message', message)
     } else {
+      const created = await roomCreator('chat', null, null)
+      console.log(`created room: ${JSON.stringify(created)}`)
+      // socket.join(roomName)
       return;
     }
     
   })
-  const roomCreator = async(name, id, peeps) => {
-    const room = await checkId(id)
-    if (room.id) { return; }
-    console.log(`peeps: ${peeps}`)
-    socket.join(name);
-    let shiey = '';
-    const saved_room = await save_room(name)
-    shiey = await getRoom(name)
-    const roomId = shiey[0][0].id;
-    const result = await add_user_convo(id, roomId)
-    const grouped = await add_group(peeps, roomId)
-    console.log(`grouped: ${grouped}`)
-    io.to(name).emit('new-room', name);
-    console.log(`new room created: ${name}, and shiey: ${JSON.stringify(shiey[0][0])} plus da result boi: ${JSON.stringify(result)}`)
+  const roomCreator = async(name, id, peeps, userId) => {
+    if (id === null && peeps === null) {
+      socket.join(name)
+      const saved_room = await save_room(name)
+      console.log(`saved room: ${JSON.stringify(saved_room)}`)
+    } else {
+      const room = await checkId(id)
+      if (room.id) { return; }
+      console.log(`peeps: ${peeps}`)
+      socket.join(name);
+      let shiey = '';
+      const saved_room = await save_room(name)
+      shiey = await getRoom(name)
+      const roomId = shiey[0][0].id;
+      const result = await add_user_convo(id, roomId)
+      const grouped = await add_group(peeps, roomId)
+      console.log(`grouped: ${grouped}`)
+      io.to(name).emit('new-room', name);
+      console.log(`new room created: ${name}, and shiey: ${JSON.stringify(shiey[0][0])} plus da result boi: ${JSON.stringify(result)}`)
+    }
+    
   }
 
   socket.on('create-room', async (roomName, userId, ppl) => {
