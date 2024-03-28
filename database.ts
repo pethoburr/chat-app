@@ -134,18 +134,15 @@ const getId = async(name: string) => {
     return id[0][0].id;
 }
 
-export const add_group = async (ppl: string[], roomId: string) => {
+interface Peeps {
+    id: number,
+    name: string
+}
+
+export const add_group = async (ppl: Peeps[], roomId: string) => {
     const room_id = parseInt(roomId)
-    const allIdz: number[] = []
-    await Promise.all(
-        ppl.map(async (name: string) => {
-            const id = await getId(name)
-            allIdz.push(id)
-        })
-    )
-    console.log(`all ids: ${allIdz}`)
-    await Promise.all(allIdz.map(async (id: number) => {
-        const convo = await pool.query<RowDataPacket[]>('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)',[id, room_id])
+    await Promise.all(ppl.map(async (guy: Peeps) => {
+        const convo = await pool.query<RowDataPacket[]>('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)',[guy.id, room_id])
         console.log(`convo: ${JSON.stringify(convo)}`)
     }))
 }
@@ -154,9 +151,10 @@ export const checkId = async (id: number) => {
     const result = await pool.query<RowDataPacket[]>('SELECT * FROM room WHERE id = ?', [id])
     console.log(`is it thurr: ${JSON.stringify(result)}`)
     if (result[0][0].length) {
+        console.log(`result: ${result[0][0]}`)
         return result[0][0];
     } else {
-        return null;
+        console.log(`result: ${JSON.stringify(result)}`);
     }
 }
 
