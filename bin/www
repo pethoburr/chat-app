@@ -42,20 +42,21 @@ pool.getConnection((err, connection) => {
 
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
-  socket.on('send-message', async (message, roomName) => {
+  socket.on('send-message', async (message, roomName, peeps) => {
     if (roomName) {
         const savedMsg = await save_msg(message)
         console.log(`saved msg: ${savedMsg}`)
         socket.to(roomName).emit('receive-message', message)
     } else {
-      const created = await roomCreator('chat', null, null)
+      const created = await roomCreator(roomName, message.room_id, peeps)
       console.log(`created room: ${JSON.stringify(created)}`)
       // socket.join(roomName)
       return;
     }
     
   })
-  const roomCreator = async(name, id, peeps, userId) => {
+
+  const roomCreator = async(name, id, peeps) => {
     if (id === null && peeps === null) {
       socket.join(name)
       const saved_room = await save_room(name)
@@ -77,6 +78,12 @@ io.on('connection', (socket) => {
     }
     
   }
+
+  //   message {
+  //   content: message,
+  //   user_id: number,
+  //   room_id: number
+  // }
 
   socket.on('create-room', async (roomName, userId, ppl) => {
     roomCreator(roomName, userId, ppl)

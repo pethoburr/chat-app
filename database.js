@@ -62,15 +62,18 @@ export const groupchat = (userId, roomId) => __awaiter(void 0, void 0, void 0, f
     console.log(`new group: ${newGroup}`);
     return newGroup;
 });
-export const save_msg = (msg) => __awaiter(void 0, void 0, void 0, function* () {
+export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function* () {
     const saved_msg = yield pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id]);
     const checker = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     if (checker[0][0].length > 0) {
         return;
     }
     else {
-        const saved_convo = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id]);
-        return { saved_msg, saved_convo };
+        yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
+            const saved_convo = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id]);
+            console.log(`saved convo: ${JSON.stringify(saved_convo)}`);
+        })));
+        return saved_msg;
     }
 });
 export const updated_msg = (msg) => __awaiter(void 0, void 0, void 0, function* () {

@@ -71,14 +71,19 @@ interface MsgData {
     room_id: number
 }
 
-export const save_msg = async(msg: MsgData) => {
+export const save_msg = async(msg: MsgData, ppl: number[]) => {
     const saved_msg = await pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id])
     const checker = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     if (checker[0][0].length > 0) {
         return;
     } else {
-        const saved_convo = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id])
-        return { saved_msg, saved_convo};
+        await Promise.all(
+                ppl.map(async (id: number) => {
+                const saved_convo = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id])
+                console.log(`saved convo: ${JSON.stringify(saved_convo)}`)
+            })
+        )
+            return saved_msg;
     }
 }
 
