@@ -65,6 +65,10 @@ export const groupchat = (userId, roomId) => __awaiter(void 0, void 0, void 0, f
 export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function* () {
     const saved_msg = yield pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id]);
     const checker = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
+    yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
+        const checker = yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
+        console.log('checker:' + JSON.stringify(checker));
+    })));
     if (checker[0][0].length > 0) {
         return;
     }
