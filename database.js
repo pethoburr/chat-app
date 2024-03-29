@@ -110,14 +110,8 @@ const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
 });
 export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const room_id = parseInt(roomId);
-    const allIdz = [];
-    yield Promise.all(ppl.map((name) => __awaiter(void 0, void 0, void 0, function* () {
-        const id = yield getId(name);
-        allIdz.push(id);
-    })));
-    console.log(`all ids: ${allIdz}`);
-    yield Promise.all(allIdz.map((id) => __awaiter(void 0, void 0, void 0, function* () {
-        const convo = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [id, room_id]);
+    yield Promise.all(ppl.map((guy) => __awaiter(void 0, void 0, void 0, function* () {
+        const convo = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [guy.id, room_id]);
         console.log(`convo: ${JSON.stringify(convo)}`);
     })));
 });
@@ -125,10 +119,11 @@ export const checkId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('SELECT * FROM room WHERE id = ?', [id]);
     console.log(`is it thurr: ${JSON.stringify(result)}`);
     if (result[0][0].length) {
+        console.log(`result: ${result[0][0]}`);
         return result[0][0];
     }
     else {
-        return null;
+        console.log(`result: ${JSON.stringify(result)}`);
     }
 });
 export const get_messages = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
