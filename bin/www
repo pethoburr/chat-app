@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
         console.log(`saved msg: ${savedMsg}`)
         socket.to(roomName).emit('receive-message', message)
     } else {
-      const created = await roomCreator(roomName, message.room_id, peeps.id)
+      const created = await roomCreator(roomName, message.room_id, peeps)
       console.log(`created room: ${JSON.stringify(created)}`)
       socket.join(roomName)
       return;
