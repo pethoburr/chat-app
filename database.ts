@@ -139,6 +139,14 @@ interface Peeps {
     name: string
 }
 
+export const check_room = async (ppl: Peeps[]) => {
+    await Promise.all(ppl.map(async (guy: Peeps) => {
+        const convo = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [guy.id])
+        console.log(`user convo results: ${convo}`)
+    }))
+    
+}
+
 export const add_group = async (ppl: Peeps[], roomId: string) => {
     const room_id = parseInt(roomId)
     await Promise.all(ppl.map(async (guy: Peeps) => {

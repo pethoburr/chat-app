@@ -108,6 +108,12 @@ const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`name to id: ${JSON.stringify(id)}`);
     return id[0][0].id;
 });
+export const check_room = (ppl) => __awaiter(void 0, void 0, void 0, function* () {
+    yield Promise.all(ppl.map((guy) => __awaiter(void 0, void 0, void 0, function* () {
+        const convo = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [guy.id]);
+        console.log(`user convo results: ${convo}`);
+    })));
+});
 export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const room_id = parseInt(roomId);
     yield Promise.all(ppl.map((guy) => __awaiter(void 0, void 0, void 0, function* () {
