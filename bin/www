@@ -51,6 +51,7 @@ io.on('connection', (socket) => {
       const created = await roomCreator(roomName, message.room_id, peeps)
       console.log(`created room: ${JSON.stringify(created)}`)
       socket.join(roomName)
+      socket.to(roomName).emit('receive-message', message)
       return;
     }
     
