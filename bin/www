@@ -43,8 +43,12 @@ pool.getConnection((err, connection) => {
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
   socket.on('send-message', async (message, roomName, peeps) => {
+    let convos;
     if (!peeps.length) {
-      peeps = get_convos(message.room_id)
+      convos = get_convos(message.room_id)
+      convos.map((convo) => {
+        peeps.push(convo.user_id)
+      })
     }
     if (roomName) {
         const savedMsg = await save_msg(message)
