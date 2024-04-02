@@ -111,6 +111,7 @@ const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
 export const get_convos = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [roomId]);
     console.log(`room id to convos: ${JSON.stringify(result)}`);
+    return result[0][0];
 });
 export const check_room = (ppl) => __awaiter(void 0, void 0, void 0, function* () {
     const convos = [];

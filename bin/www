@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
   socket.on('send-message', async (message, roomName, peeps) => {
     if (!peeps.length) {
-      get_convos(message.room_id)
+      peeps = get_convos(message.room_id)
     }
     if (roomName) {
         const savedMsg = await save_msg(message)
