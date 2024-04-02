@@ -49,6 +49,8 @@ io.on('connection', (socket) => {
         socket.to(roomName).emit('receive-message', message)
     } else {
       const created = await roomCreator(roomName, message.user_id, peeps)
+      const savedMsg = await save_msg(message)
+      console.log(`saved msg: ${savedMsg}`)
       console.log(`created room: ${JSON.stringify(created)}`)
       socket.join(roomName)
       socket.to(roomName).emit('receive-message', message)
