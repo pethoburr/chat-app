@@ -45,7 +45,8 @@ io.on('connection', (socket) => {
   socket.on('send-message', async (message, roomName, peeps) => {
     let convos;
     if (!peeps.length) {
-      convos = get_convos(message.room_id)
+      convos = await get_convos(message.room_id)
+      console.log(`convos: ${JSON.stringify(convos)}`)
       convos.map((convo) => {
         peeps.push(convo.user_id)
       })

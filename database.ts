@@ -1,6 +1,7 @@
-import mysql, { FieldPacket } from 'mysql2'
+import mysql from 'mysql2'
 import { RowDataPacket } from 'mysql2';
 import dotenv from 'dotenv';
+import { use } from 'passport';
 dotenv.config()
 
 export const pool = mysql.createPool({
@@ -28,7 +29,7 @@ export const matchId = async (id: string) => {
 }
 
 export const register = async (first_name: string, last_name: string, username: string, password: string) => {
-    const data = await pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES ('${first_name}', '${last_name}', '${username}', '${password}' ) `)
+    const data = await pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)`, [first_name, last_name, username, password])
     console.log('data:' + JSON.stringify(data))
 }
 
@@ -59,7 +60,7 @@ export const getRoom = async (roomName: string) => {
 }
 
 export const groupchat = async (userId: string, roomId: string) => {
-    const newGroup = await pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES ('${userId}', '${roomId}')`)
+    const newGroup = await pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES (?, ?)`, [userId, roomId])
     console.log(`new group: ${newGroup}`)
     return newGroup;
 }
@@ -141,9 +142,9 @@ interface Peeps {
 
 export const get_convos = async (roomId: number) => {
     const result = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [roomId])
-    console.log(`room id to convos: ${JSON.stringify(result)}`)
-    return result[0][0];
-}
+    console.log(`room id to convos: ${JSON.stringify(result[0])}`)
+    return result[0];
+}                                                                                                                                                                                                                                                                                                                                                                   ````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 export const check_room = async (ppl: Peeps[]) => {
     const convos: any[] = []
