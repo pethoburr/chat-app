@@ -1,7 +1,6 @@
 import mysql from 'mysql2'
 import { RowDataPacket } from 'mysql2';
 import dotenv from 'dotenv';
-import { use } from 'passport';
 dotenv.config()
 
 export const pool = mysql.createPool({

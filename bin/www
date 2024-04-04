@@ -8,7 +8,6 @@ import debug from 'debug';
 import http from 'http';
 import { add_user_convo, getRoom, pool, save_room, add_group, checkId, save_msg, get_convos } from '../database.js';
 import { Server } from 'socket.io';
-import { check } from 'express-validator';
 // var debug = require('debug')('chat-app:server');
 
 
@@ -43,6 +42,11 @@ pool.getConnection((err, connection) => {
 io.on('connection', (socket) => {
   console.log(`socket id: ${socket.id}`);
   socket.on('send-message', async (message, roomName, peeps) => {
+    if (!message || !message.content) {
+      console.error('invalid message content')
+      return;
+    }
+    message.content = message.content.trim()
     let convos;
     if (!peeps.length) {
       convos = await get_convos(message.room_id)
@@ -90,21 +94,30 @@ io.on('connection', (socket) => {
     
   }
 
-  //   message {
-  //   content: message,
-  //   user_id: number,
-  //   room_id: number
-  // }
-
   socket.on('create-room', async (roomName, userId, ppl) => {
+    if (!roomName) {
+      console.error('room name is required')
+      return;
+    }
+    roomName = roomName.trim()
     roomCreator(roomName, userId, ppl)
   })
 
   socket.on('join-room', (roomName) => {
+    if (!roomName) {
+      console.error('room name is required')
+      return;
+    }
+    roomName = roomName.trim()
     socket.join(roomName);
   })
 
   socket.on('leave-room', (roomName) => {
+    if (!roomName) {
+      console.error('room name is required')
+      return;
+    }
+    roomName = roomName.trim()
     socket.leave(roomName);
     console.log(`User ${socket.id} left room ${roomName}`)
   })
