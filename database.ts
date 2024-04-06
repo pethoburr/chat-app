@@ -113,7 +113,6 @@ export const save_room = async (roomName: string) => {
 export const add_user_convo = async (userId: string, roomId: string) => {
     const result = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
     console.log(`room created result: ${result}`)
-    return result;
 }
 
 interface Room {
@@ -128,7 +127,7 @@ export const room_name = async (room: Room) => {
     return data[0];
 }
 
-const getId = async(name: string) => {
+export const getId = async(name: string) => {
     const id = await pool.query<RowDataPacket[]>(`SELECT id FROM user WHERE username = ?`, [name])
     console.log(`name to id: ${JSON.stringify(id)}`)
     return id[0][0].id;
