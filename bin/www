@@ -77,8 +77,6 @@ io.on('connection', (socket) => {
       const saved_room = await save_room(name)
       return saved_room;
     } else {
-      const room = await checkId(id)
-      console.log(room)
       socket.join(name);
       let shiey = '';
       const saved_room = await save_room(name)

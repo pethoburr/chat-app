@@ -96,14 +96,13 @@ export const save_room = (roomName) => __awaiter(void 0, void 0, void 0, functio
 export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
     console.log(`room created result: ${result}`);
-    return result;
 });
 export const room_name = (room) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield pool.query('SELECT * FROM room WHERE id = ?', [room.room_id]);
     console.log(`roomanme: ${JSON.stringify(data[0])}`);
     return data[0];
 });
-const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
+export const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const id = yield pool.query(`SELECT id FROM user WHERE username = ?`, [name]);
     console.log(`name to id: ${JSON.stringify(id)}`);
     return id[0][0].id;

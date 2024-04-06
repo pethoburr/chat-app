@@ -76,8 +76,7 @@ export const save_msg = async(msg: MsgData, ppl: number[]) => {
     const checker = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     await Promise.all(
         ppl.map(async (id: number) => {
-            const checker = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE user_id = ?', [id])
-            console.log('checker:' + JSON.stringify(checker))
+            await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE user_id = ?', [id])
         })
     )
     if (checker[0][0].length > 0) {
@@ -86,8 +85,7 @@ export const save_msg = async(msg: MsgData, ppl: number[]) => {
 
         await Promise.all(
                 ppl.map(async (id: number) => {
-                const saved_convo = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id])
-                console.log(`saved convo: ${JSON.stringify(saved_convo)}`)
+                await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id])
             })
         )
             return saved_msg;
@@ -123,13 +121,11 @@ interface Room {
 
 export const room_name = async (room: Room) => {
     const data = await pool.query<RowDataPacket[]>('SELECT * FROM room WHERE id = ?', [room.room_id])
-    console.log(`roomanme: ${JSON.stringify(data[0])}`)
     return data[0];
 }
 
 export const getId = async(name: string) => {
     const id = await pool.query<RowDataPacket[]>(`SELECT id FROM user WHERE username = ?`, [name])
-    console.log(`name to id: ${JSON.stringify(id)}`)
     return id[0][0].id;
 }
 
@@ -148,7 +144,6 @@ export const check_room = async (ppl: Peeps[]) => {
     const convos: any[] = []
     await Promise.all(ppl.map(async (guy: Peeps) => {
         const convo = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [guy.id])
-        console.log(`user convo results: ${JSON.stringify(convo[0][0])}`)
         convos.push(convo)
     }))
     return convos;
@@ -175,6 +170,6 @@ export const checkId = async (id: number) => {
 
 export const get_messages = async (roomId: string) => {
     const msgs = await pool.query('SELECT * FROM messages WHERE room_id = ?', [roomId])
-    console.log(`goteee ${JSON.stringify(msgs[0])}`)
+    console.log(`goteee: ${JSON.stringify(msgs[0])}`)
     return msgs[0];
 }
