@@ -60,10 +60,9 @@ io.on('connection', (socket) => {
         console.log(`saved msg: ${savedMsg}`)
         socket.to(roomName).emit('receive-message', message)
     } else {
-      const created = await roomCreator(roomName, message.user_id, peeps)
+      await roomCreator(roomName, message.user_id, peeps)
       const savedMsg = await save_msg(message)
       console.log(`saved msg: ${savedMsg}`)
-      console.log(`created room: ${JSON.stringify(created)}`)
       socket.join(roomName)
       socket.to(roomName).emit('receive-message', message)
       return;
@@ -75,17 +74,19 @@ io.on('connection', (socket) => {
     if (id === null && peeps === null) {
       socket.join(name)
       const saved_room = await save_room(name)
-      return saved_room;
+      console.log(saved_room)
+      return
     } else {
       socket.join(name);
       let shiey = '';
       const saved_room = await save_room(name)
+      console.log(saved_room)
       shiey = await getRoom(name)
       const roomId = shiey[0][0].id;
       await add_user_convo(id, roomId)
       await add_group(peeps, roomId)
       io.to(name).emit('new-room', name);
-      return saved_room;
+      return
     }
     
   }

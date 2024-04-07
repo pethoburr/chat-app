@@ -66,16 +66,14 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
     const saved_msg = yield pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id]);
     const checker = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
-        const checker = yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
-        console.log('checker:' + JSON.stringify(checker));
+        yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
     })));
     if (checker[0][0].length > 0) {
         return;
     }
     else {
         yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
-            const saved_convo = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id]);
-            console.log(`saved convo: ${JSON.stringify(saved_convo)}`);
+            yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id]);
         })));
         return saved_msg;
     }
@@ -99,12 +97,10 @@ export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void
 });
 export const room_name = (room) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield pool.query('SELECT * FROM room WHERE id = ?', [room.room_id]);
-    console.log(`roomanme: ${JSON.stringify(data[0])}`);
     return data[0];
 });
 export const getId = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const id = yield pool.query(`SELECT id FROM user WHERE username = ?`, [name]);
-    console.log(`name to id: ${JSON.stringify(id)}`);
     return id[0][0].id;
 });
 export const get_convos = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -116,7 +112,6 @@ export const check_room = (ppl) => __awaiter(void 0, void 0, void 0, function* (
     const convos = [];
     yield Promise.all(ppl.map((guy) => __awaiter(void 0, void 0, void 0, function* () {
         const convo = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [guy.id]);
-        console.log(`user convo results: ${JSON.stringify(convo[0][0])}`);
         convos.push(convo);
     })));
     return convos;
@@ -141,6 +136,6 @@ export const checkId = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 export const get_messages = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const msgs = yield pool.query('SELECT * FROM messages WHERE room_id = ?', [roomId]);
-    console.log(`goteee ${JSON.stringify(msgs[0])}`);
+    console.log(`goteee: ${JSON.stringify(msgs[0])}`);
     return msgs[0];
 });
