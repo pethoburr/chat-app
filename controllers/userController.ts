@@ -51,7 +51,7 @@ export const sign_up =
 ]
 
 interface User {
-    _id: string,
+    id: string,
     first_name: string,
     last_name: string,
     username: string,
@@ -68,7 +68,7 @@ export const log_in = asyncHandler(async (req: Request, res: Response, next: Nex
             console.log(`info: ${JSON.stringify(info)}`);
             return res.status(400).json(info);
           }
-          const userId = user._id.toString() 
+          const userId = user.id.toString() 
           const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
         return res.status(200).json({ user, token })
         })(req, res, next)
@@ -101,5 +101,5 @@ export const all_users = asyncHandler(async (req: Request, res: Response, next: 
         next(err)
     }
 })
-
+  
 

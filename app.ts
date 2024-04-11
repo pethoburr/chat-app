@@ -35,6 +35,7 @@ passport.use(
       console.log('idk man shit worked')
       return done(null, user);
     } catch(err) {
+      console.log('err:' + err)
       return done(err);
     }
   })

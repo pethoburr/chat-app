@@ -41,6 +41,7 @@ passport.use(new LocalStrategy((username, password, done) => __awaiter(void 0, v
         return done(null, user);
     }
     catch (err) {
+        console.log('err:' + err);
         return done(err);
     }
 })));
