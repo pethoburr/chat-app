@@ -66,9 +66,9 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
     const saved_msg = yield pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id]);
     const checker = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     console.log(`ppl: ${ppl}`);
-    // if (!ppl.length) {
-    //     console.log(`checker: ${JSON.stringify(checker)}`)
-    // }
+    if (!ppl.length) {
+        console.log(`checker: ${JSON.stringify(checker)}`);
+    }
     yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
         yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
     })));
@@ -76,6 +76,7 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
         return;
     }
     else {
+        console.log(`checker: ${JSON.stringify(checker)}`);
         yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
             yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id]);
         })));
