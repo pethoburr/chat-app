@@ -72,13 +72,14 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
     yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
         yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
     })));
-    if (checker[0][0].length > 0) {
+    console.log(`checker here: ${JSON.stringify(checker[0])}`);
+    if (checker[0].length > 0) {
         return;
     }
     else {
-        console.log(`checker: ${JSON.stringify(checker)}`);
         yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
-            yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id]);
+            console.log('mapping');
+            yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [id, msg.room_id]);
         })));
         return saved_msg;
     }

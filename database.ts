@@ -83,12 +83,13 @@ export const save_msg = async(msg: MsgData, ppl: number[]) => {
             await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE user_id = ?', [id])
         })
     )
-    if (checker[0][0].length > 0) {
+    console.log(`checker here: ${JSON.stringify(checker[0])}`)
+    if (checker[0].length > 0) {
         return;
     } else {
-        console.log(`checker: ${JSON.stringify(checker)}`)
         await Promise.all(
                 ppl.map(async (id: number) => {
+                console.log('mapping')
                 await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [id, msg.room_id])
             })
         )
