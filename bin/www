@@ -56,12 +56,12 @@ io.on('connection', (socket) => {
       })
     }
     if (roomName) {
-        const savedMsg = await save_msg(message)
+        const savedMsg = await save_msg(message, peeps)
         console.log(`saved msg: ${savedMsg}`)
         socket.to(roomName).emit('receive-message', message)
     } else {
       await roomCreator(roomName, message.user_id, peeps)
-      const savedMsg = await save_msg(message)
+      const savedMsg = await save_msg(message, peeps)
       console.log(`saved msg: ${savedMsg}`)
       socket.join(roomName)
       socket.to(roomName).emit('receive-message', message)

@@ -74,6 +74,10 @@ interface MsgData {
 export const save_msg = async(msg: MsgData, ppl: number[]) => {
     const saved_msg = await pool.query('INSERT INTO messages (content, room_id) VALUES (?, ?)', [msg.content, msg.room_id])
     const checker = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
+    console.log(`ppl: ${ppl}`)
+    // if (!ppl.length) {
+    //     console.log(`checker: ${JSON.stringify(checker)}`)
+    // }
     await Promise.all(
         ppl.map(async (id: number) => {
             await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE user_id = ?', [id])
@@ -82,13 +86,12 @@ export const save_msg = async(msg: MsgData, ppl: number[]) => {
     if (checker[0][0].length > 0) {
         return;
     } else {
-
         await Promise.all(
                 ppl.map(async (id: number) => {
                 await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [msg.user_id, msg.room_id])
             })
         )
-            return saved_msg;
+        return saved_msg;
     }
 }
 

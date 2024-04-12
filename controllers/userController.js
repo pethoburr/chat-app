@@ -64,7 +64,7 @@ export const log_in = asyncHandler((req, res, next) => __awaiter(void 0, void 0,
             console.log(`info: ${JSON.stringify(info)}`);
             return res.status(400).json(info);
         }
-        const userId = user._id.toString();
+        const userId = user.id.toString();
         const token = jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
         return res.status(200).json({ user, token });
     })(req, res, next);
