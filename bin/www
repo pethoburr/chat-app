@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
         peeps.push(convo.user_id)
       })
     }
-    const boolie = await match_room(message.roomId)
+    const boolie = await match_room(message.room_id)
     if (boolie) {
         const savedMsg = await save_msg(message, peeps)
         console.log(`saved msg: ${savedMsg}`)

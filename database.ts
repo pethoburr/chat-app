@@ -103,12 +103,12 @@ export const deleted_msg = async (id: string) => {
 
 export const save_room = async (roomName: string) => {
     const result = await pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
-    console.log(`saved room: ${result}`);
+    return result;
 }
 
 export const add_user_convo = async (userId: string, roomId: string) => {
     const result = await pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
-    console.log(`room created result: ${result}`)
+    return result;
 }
 
 interface Room {
@@ -148,11 +148,14 @@ export const check_room = async (ppl: Peeps[]) => {
 }
 
 export const match_room = async (roomId: number) => {
+    console.log(`ROOM ID: ${roomId}`)
     const room = await pool.query<RowDataPacket[]>(`SELECT * FROM room WHERE id = ?`, [roomId])
-    console.log(`matched room: ${JSON.stringify(room)}`)
+    console.log(`matched room: ${JSON.stringify(room[0])}`)
     if (room[0].length) {
+        console.log('truey')
         return true;
     } else {
+        console.log('nah nah nah')
         return false;
     }
 }

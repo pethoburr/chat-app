@@ -32,16 +32,13 @@ export const matchId = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 export const register = (first_name, last_name, username, password) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)`, [first_name, last_name, username, password]);
-    console.log('data:' + JSON.stringify(data));
 });
 export const make_room = (title) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield pool.query(`INSERT INTO room (title) VALUES (?)`, [title]);
-    console.log('data:' + JSON.stringify(data));
     return data;
 });
 export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user_conversation WHERE user_id = ?", [id]);
-    console.log(`rooms: ${JSON.stringify(result[0])}`);
     if (!Array.isArray(result[0])) {
         throw new Error("unexpected result format from db query");
     }
@@ -54,12 +51,10 @@ export const user_rooms = (id) => __awaiter(void 0, void 0, void 0, function* ()
 });
 export const getRoom = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
     const room = yield pool.query('SELECT * FROM room WHERE title = ?', [roomName]);
-    console.log(`specific room: ${room}`);
     return room;
 });
 export const groupchat = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const newGroup = yield pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES (?, ?)`, [userId, roomId]);
-    console.log(`new group: ${newGroup}`);
     return newGroup;
 });
 export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,12 +62,11 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
     const checker = yield pool.query('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     console.log(`ppl: ${ppl}`);
     if (!ppl.length) {
-        console.log(`checker: ${JSON.stringify(checker)}`);
+        return;
     }
     yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
         yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
     })));
-    console.log(`checker here: ${JSON.stringify(checker[0])}`);
     if (checker[0].length > 0) {
         return;
     }
@@ -94,12 +88,11 @@ export const deleted_msg = (id) => __awaiter(void 0, void 0, void 0, function* (
 });
 export const save_room = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
-    console.log(`saved room: ${result}`);
     return result;
 });
 export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [userId, roomId]);
-    console.log(`room created result: ${result}`);
+    return result;
 });
 export const room_name = (room) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield pool.query('SELECT * FROM room WHERE id = ?', [room.room_id]);
@@ -123,9 +116,17 @@ export const check_room = (ppl) => __awaiter(void 0, void 0, void 0, function* (
     return convos;
 });
 export const match_room = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(`ROOM ID: ${roomId}`);
     const room = yield pool.query(`SELECT * FROM room WHERE id = ?`, [roomId]);
-    console.log(`matched room: ${JSON.stringify(room)}`);
-    return room[0];
+    console.log(`matched room: ${JSON.stringify(room[0])}`);
+    if (room[0].length) {
+        console.log('truey');
+        return true;
+    }
+    else {
+        console.log('nah nah nah');
+        return false;
+    }
 });
 export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const room_id = parseInt(roomId);
