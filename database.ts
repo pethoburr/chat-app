@@ -29,18 +29,15 @@ export const matchId = async (id: string) => {
 
 export const register = async (first_name: string, last_name: string, username: string, password: string) => {
     const data = await pool.query(`INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)`, [first_name, last_name, username, password])
-    console.log('data:' + JSON.stringify(data))
 }
 
 export const make_room = async (title: string) => {
     const data = await pool.query(`INSERT INTO room (title) VALUES (?)`, [title])
-    console.log('data:' + JSON.stringify(data))
     return data;
 }
 
 export const user_rooms = async (id: string) => {
     const result = await pool.query("SELECT * FROM user_conversation WHERE user_id = ?",[id])
-    console.log(`rooms: ${JSON.stringify(result[0])}`)
     if (!Array.isArray(result[0])) {
         throw new Error("unexpected result format from db query")
     }
@@ -54,13 +51,11 @@ export const user_rooms = async (id: string) => {
 
 export const getRoom = async (roomName: string) => {
     const room = await pool.query('SELECT * FROM room WHERE title = ?', [roomName])
-    console.log(`specific room: ${room}`)
     return room;
 }
 
 export const groupchat = async (userId: string, roomId: string) => {
     const newGroup = await pool.query(`INSERT INTO user_conversation (userId, roomId) VALUES (?, ?)`, [userId, roomId])
-    console.log(`new group: ${newGroup}`)
     return newGroup;
 }
 
@@ -76,14 +71,13 @@ export const save_msg = async(msg: MsgData, ppl: number[]) => {
     const checker = await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE room_id = ?', [msg.room_id]);
     console.log(`ppl: ${ppl}`)
     if (!ppl.length) {
-        console.log(`checker: ${JSON.stringify(checker)}`)
+        return;
     }
     await Promise.all(
         ppl.map(async (id: number) => {
             await pool.query<RowDataPacket[]>('SELECT * FROM user_conversation WHERE user_id = ?', [id])
         })
     )
-    console.log(`checker here: ${JSON.stringify(checker[0])}`)
     if (checker[0].length > 0) {
         return;
     } else {
