@@ -33,7 +33,7 @@ export const register = async (first_name: string, last_name: string, username: 
 }
 
 export const make_room = async (title: string) => {
-    const data = await pool.query(`INSERT INTO room (title) VALUES ('${title}' ) `)
+    const data = await pool.query(`INSERT INTO room (title) VALUES (?)`, [title])
     console.log('data:' + JSON.stringify(data))
     return data;
 }
@@ -178,3 +178,4 @@ export const get_messages = async (roomId: string) => {
     console.log(`goteee: ${JSON.stringify(msgs[0])}`)
     return msgs[0];
 }
+
