@@ -35,7 +35,7 @@ export const register = (first_name, last_name, username, password) => __awaiter
     console.log('data:' + JSON.stringify(data));
 });
 export const make_room = (title) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield pool.query(`INSERT INTO room (title) VALUES ('${title}' ) `);
+    const data = yield pool.query(`INSERT INTO room (title) VALUES (?)`, [title]);
     console.log('data:' + JSON.stringify(data));
     return data;
 });
@@ -121,6 +121,11 @@ export const check_room = (ppl) => __awaiter(void 0, void 0, void 0, function* (
         convos.push(convo);
     })));
     return convos;
+});
+export const match_room = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const room = yield pool.query(`SELECT * FROM room WHERE id = ?`, [roomId]);
+    console.log(`matched room: ${JSON.stringify(room)}`);
+    return room[0];
 });
 export const add_group = (ppl, roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const room_id = parseInt(roomId);

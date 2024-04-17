@@ -110,7 +110,6 @@ export const deleted_msg = async (id: string) => {
 export const save_room = async (roomName: string) => {
     const result = await pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
     console.log(`saved room: ${result}`);
-    return result;
 }
 
 export const add_user_convo = async (userId: string, roomId: string) => {
@@ -152,6 +151,16 @@ export const check_room = async (ppl: Peeps[]) => {
         convos.push(convo)
     }))
     return convos;
+}
+
+export const match_room = async (roomId: number) => {
+    const room = await pool.query<RowDataPacket[]>(`SELECT * FROM room WHERE id = ?`, [roomId])
+    console.log(`matched room: ${JSON.stringify(room)}`)
+    if (room[0].length) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 export const add_group = async (ppl: Peeps[], roomId: string) => {
