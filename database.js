@@ -65,7 +65,8 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
         return;
     }
     yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
-        yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id]);
+        console.log('hereyoo id:' + JSON.stringify(id));
+        yield pool.query('SELECT * FROM user_conversation WHERE user_id = ?', [id.id]);
     })));
     if (checker[0].length > 0) {
         return;
@@ -73,7 +74,7 @@ export const save_msg = (msg, ppl) => __awaiter(void 0, void 0, void 0, function
     else {
         yield Promise.all(ppl.map((id) => __awaiter(void 0, void 0, void 0, function* () {
             console.log('mapping');
-            yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [id, msg.room_id]);
+            yield pool.query('INSERT INTO user_conversation (user_id, room_id) VALUES (?, ?)', [id.id, msg.room_id]);
         })));
         return saved_msg;
     }
