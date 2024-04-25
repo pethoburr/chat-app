@@ -89,6 +89,7 @@ export const deleted_msg = (id) => __awaiter(void 0, void 0, void 0, function* (
 });
 export const save_room = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
+    console.log(`saved room result: ${JSON.stringify(result)}`);
     return result;
 });
 export const add_user_convo = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -152,3 +153,9 @@ export const get_messages = (roomId) => __awaiter(void 0, void 0, void 0, functi
     console.log(`goteee: ${JSON.stringify(msgs[0])}`);
     return msgs[0];
 });
+export const last_room = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query('SELECT * FROM room ORDER BY id DESC LIMIT 1');
+    console.log(`last room: ${JSON.stringify(result[0][0].id)}`);
+    return result[0][0].id;
+});
+last_room();

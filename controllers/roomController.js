@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
-import { make_room, room_name, user_rooms } from '../database.js';
+import { last_room, make_room, room_name, user_rooms } from '../database.js';
 export const create_room = [
     body("title", "title required")
         .trim()
@@ -40,4 +40,8 @@ export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void
         })));
     }
     res.status(200).json({ room });
+}));
+export const recent_room = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const roomId = yield last_room();
+    res.status(200).json(roomId);
 }));

@@ -109,6 +109,7 @@ export const deleted_msg = async (id: string) => {
 
 export const save_room = async (roomName: string) => {
     const result = await pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
+    console.log(`saved room result: ${JSON.stringify(result)}`)
     return result;
 }
 
@@ -191,3 +192,10 @@ export const get_messages = async (roomId: string) => {
     return msgs[0];
 }
 
+export const last_room = async () => {
+    const result = await pool.query<RowDataPacket[]>('SELECT * FROM room ORDER BY id DESC LIMIT 1')
+    console.log(`last room: ${JSON.stringify(result[0][0].id)}`)
+    return result[0][0].id;
+}
+
+last_room()

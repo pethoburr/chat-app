@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { make_room, room_name, user_rooms } from '../database.js';
+import { last_room, make_room, room_name, user_rooms } from '../database.js';
 import { RowDataPacket } from 'mysql2';
 
 export const create_room = [
@@ -41,3 +41,7 @@ export const get_rooms = asyncHandler(async (req: Request, res: Response, next) 
         res.status(200).json({ room })
 })
 
+export const recent_room = asyncHandler(async (req: Request, res: Response, next) => {
+        const roomId = await last_room();
+        res.status(200).json(roomId)
+})
