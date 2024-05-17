@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
     }
     roomName = roomName.trim()
     const newRoom = await roomCreator(roomName, userId, ppl)
-    socket.emit('created-room', newRoom)
+    io.to(roomName).emit('created-room', newRoom)
   })
 
   socket.on('join-room', (roomName) => {
