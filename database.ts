@@ -107,10 +107,21 @@ export const deleted_msg = async (id: string) => {
     return deletedMsg;
 }
 
+interface Roomed  {
+        fieldCount: number,
+        affectedRows: number,
+        insertId: number,
+        info: string,
+        serverStatus: number,
+        warningStatus: number,
+        changedRows: number
+}
+
 export const save_room = async (roomName: string) => {
-    const result = await pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
-    console.log(`saved room result: ${JSON.stringify(result)}`)
-    return result;
+    const result = await pool.query<RowDataPacket[]>('INSERT INTO room (title) VALUE (?)', [roomName]);
+    const last = await pool.query<RowDataPacket[]>('SELECT LAST_INSERT_ID() as id')
+    console.log(`saved room result: ${JSON.stringify(last)}`)
+    return result[0];
 }
 
 export const add_user_convo = async (userId: string, roomId: string) => {
@@ -197,5 +208,3 @@ export const last_room = async () => {
     console.log(`last room: ${JSON.stringify(result[0][0].id)}`)
     return result[0][0].id;
 }
-
-last_room()

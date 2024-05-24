@@ -33,6 +33,7 @@ export const get_rooms = asyncHandler((req, res, next) => __awaiter(void 0, void
     const room = [];
     const userId = req.params.id;
     const rooms = yield user_rooms(userId);
+    console.log(`rooms yabisshh: ${JSON.stringify(rooms)}`);
     if (Array.isArray(rooms)) {
         yield Promise.all(rooms.map((convo) => __awaiter(void 0, void 0, void 0, function* () {
             const name = yield room_name(convo);

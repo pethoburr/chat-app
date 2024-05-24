@@ -73,20 +73,15 @@ io.on('connection', (socket) => {
     if (id === null && peeps === null) {
       socket.join(name)
       await save_room(name)
-      shiey = await getRoom(name)
-      console.log(`shiey: ${JSON.stringify(shiey[0][0])}`)
-      return shiey[0][0]
+      return { id: inserted.insertId, title: name }
     } else {
       socket.join(name);
-      let shiey = '';
-      await save_room(name)
-      shiey = await getRoom(name)
-      const roomId = shiey[0][0].id;
-      console.log(`shiey: ${JSON.stringify(shiey[0][0])}`)
-      await add_user_convo(id, roomId)
-      await add_group(peeps, roomId)
+      const inserted = await save_room(name)
+      console.log(`inserted: ${inserted.insertId}`)
+      await add_user_convo(id, inserted.insertId)
+      await add_group(peeps, inserted.insertId)
       io.to(name).emit('new-room', name);
-      return shiey[0][0]
+      return { id: inserted.insertId, title: name }
     }
   }
 
@@ -97,7 +92,7 @@ io.on('connection', (socket) => {
     }
     roomName = roomName.trim()
     const newRoom = await roomCreator(roomName, userId, ppl)
-    io.to(roomName).emit('created-room', newRoom)
+    socket.emit('created-room', newRoom)
   })
 
   socket.on('join-room', (roomName) => {
@@ -184,6 +179,6 @@ function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
-    : 'port ' + addr.port;
+    : 'port ' + addr.port; 
   debug('Listening on ' + bind);
 }

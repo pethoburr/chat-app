@@ -31,6 +31,7 @@ export const get_rooms = asyncHandler(async (req: Request, res: Response, next) 
         const room: Room[] = [];
         const userId = req.params.id;
         const rooms = await user_rooms(userId)
+        console.log(`rooms yabisshh: ${JSON.stringify(rooms)}`)
         if (Array.isArray(rooms)) {
                 await Promise.all(rooms.map(async (convo) => {
                         const name = await room_name(convo)
