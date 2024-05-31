@@ -107,14 +107,10 @@ export const deleted_msg = async (id: string) => {
     return deletedMsg;
 }
 
-interface Roomed  {
-        fieldCount: number,
-        affectedRows: number,
-        insertId: number,
-        info: string,
-        serverStatus: number,
-        warningStatus: number,
-        changedRows: number
+export const leave_group = async (userId: number, roomId: number) => {
+    console.log(userId, roomId)
+    const deleted = await pool.query('DELETE FROM user_conversation WHERE user_id = ? AND room_id = ?', [userId, roomId])
+    console.log('left group' + JSON.stringify(deleted))
 }
 
 export const save_room = async (roomName: string) => {

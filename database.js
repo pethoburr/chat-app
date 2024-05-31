@@ -87,6 +87,11 @@ export const deleted_msg = (id) => __awaiter(void 0, void 0, void 0, function* (
     const deletedMsg = yield pool.query("DELETE FROM messages WHERE id = ?", [id]);
     return deletedMsg;
 });
+export const leave_group = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(userId, roomId);
+    const deleted = yield pool.query('DELETE FROM user_conversation WHERE user_id = ? AND room_id = ?', [userId, roomId]);
+    console.log('left group' + JSON.stringify(deleted));
+});
 export const save_room = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
     const last = yield pool.query('SELECT LAST_INSERT_ID() as id');

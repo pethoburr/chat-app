@@ -6,7 +6,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'http';
-import { add_user_convo, getRoom, pool, save_room, add_group, checkId, save_msg, get_convos, match_room } from '../database.js';
+import { add_user_convo, getRoom, pool, save_room, add_group, checkId, save_msg, get_convos, match_room, leave_group } from '../database.js';
 import { Server } from 'socket.io';
 // var debug = require('debug')('chat-app:server');
 
@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
     socket.emit('created-room', newRoom)
   })
 
-  socket.on('join-room', (roomName) => {
+  socket.on('join-room', async (roomName, userId, roomId) => {
     if (!roomName) {
       console.error('room name is required')
       return;
@@ -104,13 +104,14 @@ io.on('connection', (socket) => {
     socket.join(roomName);
   })
 
-  socket.on('leave-room', (roomName) => {
+  socket.on('leave-room', async (roomName, userId, roomId) => {
     if (!roomName) {
       console.error('room name is required')
       return;
     }
     roomName = roomName.trim()
     socket.leave(roomName);
+    const left = await leave_group(userId, roomId)
     console.log(`User ${socket.id} left room ${roomName}`)
   })
 });
