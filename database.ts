@@ -113,6 +113,12 @@ export const leave_group = async (userId: number, roomId: number) => {
     console.log('left group' + JSON.stringify(deleted))
 }
 
+export const join_group = async (userId: number, roomId: number) => {
+    const result = await pool.query<RowDataPacket[]>('INSERT INTO user_conversation (user_id, room_id)', [userId, roomId])
+    console.log(`user and room ids ${JSON.stringify(result)}`)
+    return result[0]
+}
+
 export const save_room = async (roomName: string) => {
     const result = await pool.query<RowDataPacket[]>('INSERT INTO room (title) VALUE (?)', [roomName]);
     const last = await pool.query<RowDataPacket[]>('SELECT LAST_INSERT_ID() as id')

@@ -92,6 +92,11 @@ export const leave_group = (userId, roomId) => __awaiter(void 0, void 0, void 0,
     const deleted = yield pool.query('DELETE FROM user_conversation WHERE user_id = ? AND room_id = ?', [userId, roomId]);
     console.log('left group' + JSON.stringify(deleted));
 });
+export const join_group = (userId, roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query('INSERT INTO user_conversation (user_id, room_id)', [userId, roomId]);
+    console.log(`user and room ids ${JSON.stringify(result)}`);
+    return result[0];
+});
 export const save_room = (roomName) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query('INSERT INTO room (title) VALUE (?)', [roomName]);
     const last = yield pool.query('SELECT LAST_INSERT_ID() as id');
