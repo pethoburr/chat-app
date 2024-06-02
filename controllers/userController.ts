@@ -1,4 +1,4 @@
-import { pool } from '../database.js';
+import { getUsername, pool } from '../database.js';
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
@@ -72,6 +72,11 @@ export const log_in = asyncHandler(async (req: Request, res: Response, next: Nex
           const token = jwt.sign({ id: userId}, process.env.SECRET as string, { expiresIn: 60 * 60 * 24 * 30})
         return res.status(200).json({ user, token })
         })(req, res, next)
+})
+
+export const get_name = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const id = parseInt(req.params.id)
+    const name = getUsername(id)
 })
 
 export const logout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

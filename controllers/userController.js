@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { getUsername } from '../database.js';
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 import { register } from '../database.js';
@@ -68,6 +69,10 @@ export const log_in = asyncHandler((req, res, next) => __awaiter(void 0, void 0,
         const token = jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
         return res.status(200).json({ user, token });
     })(req, res, next);
+}));
+export const get_name = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const name = getUsername(id);
 }));
 export const logout = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers['cookie'];

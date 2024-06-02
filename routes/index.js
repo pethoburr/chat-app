@@ -1,6 +1,6 @@
 import express from 'express';
 var router = express.Router();
-import { getChats, log_in, logout, sign_up, userProfile } from "../controllers/userController.js";
+import { getChats, log_in, logout, sign_up, userProfile, get_name } from "../controllers/userController.js";
 import { create_room, get_rooms, recent_room } from "../controllers/roomController.js";
 import { all_users } from "../controllers/userController.js";
 import { delete_msg, get_message, update_msg } from "../controllers/messagesController.js";
@@ -17,4 +17,5 @@ router.get('/get-messages/:roomId', passport.authenticate('jwt', { session: fals
 router.post('/update-message', passport.authenticate('jwt', { session: false }), update_msg);
 router.post('/delete-message', passport.authenticate('jwt', { session: false }), delete_msg);
 router.get('/last-room', passport.authenticate('jwt', { session: false }), recent_room);
+router.get('/get-name/:id', get_name);
 export default router;

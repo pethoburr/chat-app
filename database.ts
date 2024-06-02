@@ -15,6 +15,12 @@ export const allUsers = async () => {
     return result;
 }
 
+export const getUsername = async (id: number) => {
+    const result = await pool.query('SELECT * FROM user WHERE id = ?', [id])
+    console.log(`get username ${JSON.stringify(result)}`)
+    return result[0]
+}
+
 export const matchUsername = async (username: string) => {
     const result: any[] = await pool.query("SELECT * FROM user WHERE username = ?",[username]);
     const unarrayed = result[0]

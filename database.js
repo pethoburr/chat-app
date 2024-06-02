@@ -20,6 +20,11 @@ export const allUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user");
     return result;
 });
+export const getUsername = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pool.query('SELECT * FROM user WHERE id = ?', [id]);
+    console.log(`get username ${JSON.stringify(result)}`);
+    return result[0];
+});
 export const matchUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user WHERE username = ?", [username]);
     const unarrayed = result[0];
