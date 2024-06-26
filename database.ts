@@ -30,6 +30,7 @@ export const matchUsername = async (username: string) => {
 
 export const matchId = async (id: string) => {
     const result = await pool.query("SELECT * FROM user WHERE id = ?",[id]);
+    console.log(`result: ${JSON.stringify(result)}`)
     return result;
 }
 

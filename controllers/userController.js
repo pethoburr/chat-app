@@ -85,6 +85,7 @@ export const userProfile = asyncHandler((req, res, next) => __awaiter(void 0, vo
     const userId = req.params.id;
     const user = matchId(userId);
     console.log(user);
+    res.json(user);
 }));
 export const getChats = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.userId;

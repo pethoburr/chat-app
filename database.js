@@ -33,6 +33,7 @@ export const matchUsername = (username) => __awaiter(void 0, void 0, void 0, fun
 });
 export const matchId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield pool.query("SELECT * FROM user WHERE id = ?", [id]);
+    console.log(`result: ${JSON.stringify(result)}`);
     return result;
 });
 export const register = (first_name, last_name, username, password) => __awaiter(void 0, void 0, void 0, function* () {
