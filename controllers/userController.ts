@@ -89,8 +89,8 @@ export const logout = asyncHandler(async (req: Request, res: Response, next: Nex
 
 export const userProfile = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
-    const user = matchId(userId);
-    console.log(user);
+    const user = await matchId(userId);
+    console.log('userprofile:' + user);
     res.json(user)
 })
 

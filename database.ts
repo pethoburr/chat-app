@@ -29,9 +29,9 @@ export const matchUsername = async (username: string) => {
 }
 
 export const matchId = async (id: string) => {
-    const result = await pool.query("SELECT * FROM user WHERE id = ?",[id]);
-    console.log(`result: ${JSON.stringify(result)}`)
-    return result;
+    const result = await pool.query<RowDataPacket[]>("SELECT * FROM user WHERE id = ?",[id]);
+    console.log(`result: ${JSON.stringify(result[0][0])}`)
+    return result[0][0];
 }
 
 export const register = async (first_name: string, last_name: string, username: string, password: string) => {

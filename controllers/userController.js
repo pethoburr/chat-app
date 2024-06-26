@@ -83,8 +83,8 @@ export const logout = asyncHandler((req, res, next) => __awaiter(void 0, void 0,
 }));
 export const userProfile = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.params.id;
-    const user = matchId(userId);
-    console.log(user);
+    const user = yield matchId(userId);
+    console.log('userprofile:' + user);
     res.json(user);
 }));
 export const getChats = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
