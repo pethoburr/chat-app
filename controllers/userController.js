@@ -100,3 +100,6 @@ export const all_users = asyncHandler((req, res, next) => __awaiter(void 0, void
         next(err);
     }
 }));
+export const homePage = asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.send('connected');
+}));

@@ -107,5 +107,9 @@ export const all_users = asyncHandler(async (req: Request, res: Response, next: 
         next(err)
     }
 })
+
+export const homePage = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    res.send('connected')
+})
   
 

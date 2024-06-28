@@ -1,10 +1,11 @@
 import express from 'express';
 var router = express.Router();
-import { getChats, log_in, logout, sign_up, userProfile, get_name } from "../controllers/userController.js";
+import { getChats, log_in, logout, sign_up, userProfile, get_name, homePage } from "../controllers/userController.js";
 import { create_room, get_rooms, recent_room } from "../controllers/roomController.js";
 import { all_users } from "../controllers/userController.js";
 import { delete_msg, get_message, update_msg } from "../controllers/messagesController.js";
 import passport from "passport";
+router.get('/', homePage);
 router.post('/sign-up', sign_up);
 router.post('/log-in', log_in);
 router.post('/log-out', passport.authenticate('jwt', { session: false }), logout);
