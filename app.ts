@@ -60,7 +60,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(logger('dev'));
