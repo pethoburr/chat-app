@@ -25,7 +25,7 @@ app.set('port', port);
 var server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173'],
+    origin: ['*'],
     method: ['GET', 'POST']
   }
 })
@@ -122,7 +122,9 @@ io.on('connection', (socket) => {
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, '0.0.0.0', () => {
+  console.log('server is running on port 3000')
+});
 server.on('error', onError);
 server.on('listening', onListening);
 
