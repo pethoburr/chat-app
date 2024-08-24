@@ -16,18 +16,4 @@ primary_region = 'sea'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
-
-[[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
-
-[mounts]
-  source = "mysqldata"
-  destination = "/data"
-
-[env]
-  MYSQL_DATABASE = "chatter"
-  MYSQL_USER = "remote_user"
-  MYSQL_PASSWORD = "Batista1!"
  

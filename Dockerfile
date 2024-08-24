@@ -27,14 +27,6 @@ RUN npm ci --include=dev
 # Copy application code
 COPY --link . .
 
-# Install MySQL server
-RUN apt-get update && apt-get install -y mysql-server
-
-# Set environment variables for MySQL
-ENV MYSQL_DATABASE=chatter
-ENV MYSQL_USER=remote_user
-ENV MYSQL_PASSWORD=Batista1!
-
 # Build application
 RUN npm run build
 
@@ -50,9 +42,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-
-# Copy the MySQL configuration file
-COPY ./mysql.cnf /etc/mysql/my.cnf
-
-# Start MySQL and Node.js when the container launches
-CMD service mysql start && npm start
+CMD ["npm", "run", "start"]
