@@ -5,9 +5,10 @@ dotenv.config()
 
 export const pool = mysql.createPool({
     user: process.env.USER,
-    host: process.env.HOST,
+    host: 'https://fly-mysql-hidden-frog-2146.fly.dev',
     password: process.env.PASSWORD,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+    port: 3000
 }).promise();
 
 export const allUsers = async () => {
