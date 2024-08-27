@@ -5,7 +5,7 @@ dotenv.config()
 
 export const pool = mysql.createPool({
     user: process.env.USER,
-    host: 'https://fly-mysql-hidden-frog-2146.fly.dev',
+    host: 'fly-mysql-hidden-frog-2146.internal',
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
     port: 3000
